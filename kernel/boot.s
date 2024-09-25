@@ -6,9 +6,12 @@
 
 .section .text.init
 
-.global _start
+.globl _entry
+.extern main
 
-_start:
-    wfi
+_entry:
+
+    la sp , _stack_end
+    jal main
 
 .end
