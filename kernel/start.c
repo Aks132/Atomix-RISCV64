@@ -1,13 +1,19 @@
 /*
     Here we have to configure uart and interrupt IG(if they are not disabled by default)
 */
+#include "../Include/systemaddr.h"
+#include "../Include/sysprints.h"
+void UART_SEND(const char *str){
+    while (*str) {
+        *(volatile char*)UART_TX_ADDR = *str++;
+    }
+}
 
-#define      UART_TX_ADDR      0x10000000UL
 
 int main(){ 
-    char *str = "Hello, World!\n";
-    for (int i = 0; str[i] != '\0'; ++i) {
-        *(volatile char*)UART_TX_ADDR = str[i];
-    }
+    
+    UART_SEND(string);
+    UART_SEND(fun);
+
     return 0;
 }

@@ -5,7 +5,7 @@ ENTRY(_entry)
 
 MEMORY
 {
-  ram  (wxa) : ORIGIN = 0x80000000, LENGTH = 128M
+  ram  (wxa) : ORIGIN = 0x80000000, LENGTH = 256M
 }
 
 /*

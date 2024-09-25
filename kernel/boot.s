@@ -2,9 +2,9 @@
 
 .option norvc
 
-.section .data
 
-.section .text.init
+
+.section .text
 
 .globl _entry
 .extern main
@@ -12,6 +12,10 @@
 _entry:
 
     la sp , _stack_end
-    jal main
+    csrr t0 , mhartid
+    bnez t0 , _loop
+    j main
 
+_loop:
+    j _loop
 .end
