@@ -1,19 +1,21 @@
 /*
     Here we have to configure uart and interrupt IG(if they are not disabled by default)
 */
-#include "../Include/systemaddr.h"
 #include "../Include/sysprints.h"
-void UART_SEND(const char *str){
-    while (*str) {
-        *(volatile char*)UART_TX_ADDR = *str++;
-    }
-}
+#include "../Include/extras.h"
+#include "/Users/deveshshevde/RISC-V/Include/libc/Wprintf.h"
+#include "/Users/deveshshevde/RISC-V/Include/systemaddr.h"
 
 
-int main(){ 
-    
+
+int x = 69;
+int *y = &x;
+int main(){
+
     UART_SEND(string);
     UART_SEND(fun);
+    PrintDigit(x);
+
 
     return 0;
 }

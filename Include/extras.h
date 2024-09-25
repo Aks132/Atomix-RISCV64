@@ -1,0 +1,2 @@
+
+extern unsigned int hartid;
