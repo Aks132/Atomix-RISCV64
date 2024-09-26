@@ -1,6 +1,8 @@
 
-#include "/Users/deveshshevde/RISC-V/Include/libc/stdarg.h"
-#include "/Users/deveshshevde/RISC-V/Include/status.h"
+#include "../Include/libc/stdarg.h"
+#include "../Include/status.h"
+#include "../Include/systemaddr.h"
+
 status_t PrintChar(char * x);
 status_t PrintDigit(int number);
 char* itoa(int num, char* str, int base);

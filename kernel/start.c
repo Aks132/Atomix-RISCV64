@@ -7,13 +7,11 @@
 #include "../include/systemaddr.h"
 
 
-int x = 69;
-int *y = &x;
+
 int main(){
 
-    UART_SEND(string);
-    UART_SEND(fun);
-    PrintDigit(x);
+    PrintChar(boot);
+    PrintDigit(hartid);
 
 
     return 0;

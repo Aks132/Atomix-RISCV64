@@ -1,4 +1,4 @@
-#include "/Users/deveshshevde/RISC-V/Include/systemaddr.h"
+#include "../Include/systemaddr.h"
 
 void UART_SEND(const char *str){
     while (*str) {

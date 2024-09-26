@@ -1,12 +1,17 @@
-#include "/Users/deveshshevde/RISC-V/Include/libc/Wprintf.h"
-#include "/Users/deveshshevde/RISC-V/Include/libc/bool.h"
+#include "../Include/libc/Wprintf.h"
+#include "../Include/libc/bool.h"
+
 status_t PrintChar(char * x){
       UART_SEND(x);
       return SUCCESS;
 }
-status_t PrintDigit(int number){
+status_t PrintDigit(const int number){
   char str[100];
   UART_SEND(itoa(number, str, 10));
+}
+status_t PrintHex(const int number){
+    char str[100];
+    UART_SEND(itoa(number, str, 16));
 }
 
 void reverse(char str[], int length)
