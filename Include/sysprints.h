@@ -9,3 +9,4 @@ const char *core0   = "Core 0 is ON \n";
 const char *core1   = "Core 1 is ON \n";
 const char *core2   = "Core 2 is ON \n";
 const char *core3   = "Core 3 is ON \n";
+const char *AllCoreBootsUp  = "All four gets booted up!! \n";

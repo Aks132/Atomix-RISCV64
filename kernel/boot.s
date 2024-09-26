@@ -63,5 +63,5 @@ init_hart3:
 
 
 _loop:
-    j _loop
+    j main
 .end

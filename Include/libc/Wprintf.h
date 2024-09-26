@@ -3,7 +3,7 @@
 #include "../Include/status.h"
 #include "../Include/systemaddr.h"
 
-status_t PrintChar(char * x);
+status_t PrintChar(const char * x);
 status_t PrintDigit(int number);
 char* itoa(int num, char* str, int base);
 void reverse(char str[], int length);

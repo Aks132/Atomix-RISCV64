@@ -1,7 +1,7 @@
 #include "../Include/libc/Wprintf.h"
 #include "../Include/libc/bool.h"
 
-status_t PrintChar(char * x){
+status_t PrintChar(const char * x){
       UART_SEND(x);
       return SUCCESS;
 }
@@ -12,6 +12,10 @@ status_t PrintDigit(const int number){
 status_t PrintHex(const int number){
     char str[100];
     UART_SEND(itoa(number, str, 16));
+}
+void Println(){
+    *(volatile char*)UART_TX_ADDR = '\n';
+
 }
 
 void reverse(char str[], int length)
