@@ -11,8 +11,26 @@
 int main(){
 
     PrintChar(boot);
-    PrintDigit(hartid);
-
-
+    PrintDigit(hartid1);
     return 0;
 }
+
+void Core0_Init(){
+    PrintChar(core0);
+}
+
+
+void Core1_Init(){
+    PrintChar(core1);
+
+}
+
+void Core2_Init(){
+    PrintChar(core2);
+
+}
+
+void Core3_Init(){
+    PrintChar(core3);
+}
+
