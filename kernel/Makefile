@@ -1,16 +1,27 @@
-all:
-	make asm
-	make c
-	make link
+# Variables for toolchain and directories
+CROSS_COMPILE = riscv64-unknown-elf-
+INCLUDE_DIR = ../include
+LIBC_DIR = $(INCLUDE_DIR)/libc
+
+# Compiler and linker flags
+CFLAGS = -mcmodel=medany -I$(INCLUDE_DIR) -I$(LIBC_DIR)
+
+# Targets
+all: asm c link
+
 asm:
-	riscv64-unknown-elf-as boot.s -o boot.o
+	$(CROSS_COMPILE)as boot.s -o boot.o
+
 c:
-	riscv64-unknown-elf-gcc -mcmodel=medany start.c -c -o start.o
-	riscv64-unknown-elf-gcc -mcmodel=medany /Users/deveshshevde/RISC-V/Include/uart.c -c -o uart.o
-	riscv64-unknown-elf-gcc -mcmodel=medany /Users/deveshshevde/RISC-V/Include/libc/Wprintf.c -c -o print.o
+	$(CROSS_COMPILE)gcc $(CFLAGS) start.c -c -o start.o
+	$(CROSS_COMPILE)gcc $(CFLAGS) $(LIBC_DIR)/Wprintf.c -c -o print.o
+	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/uart.c -c -o uart.o
+
 link:
-	riscv64-unknown-elf-ld -T linker.ld boot.o start.o print.o uart.o -o kernel.elf
+	$(CROSS_COMPILE)ld -T linker.ld boot.o start.o print.o uart.o -o kernel.elf
+
 qemu:
 	qemu-system-riscv64 -machine virt -cpu rv64 -smp 4  -m 128 -nographic -serial mon:stdio -bios none  -kernel kernel.elf
+
 clean:
-	rm *.o *.elf
+	rm -f *.o *.elf

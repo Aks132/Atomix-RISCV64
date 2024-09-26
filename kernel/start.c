@@ -3,9 +3,8 @@
 */
 #include "../Include/sysprints.h"
 #include "../Include/extras.h"
-#include "/Users/deveshshevde/RISC-V/Include/libc/Wprintf.h"
-#include "/Users/deveshshevde/RISC-V/Include/systemaddr.h"
-
+#include "../include/libc/Wprintf.h"
+#include "../include/systemaddr.h"
 
 
 int x = 69;
