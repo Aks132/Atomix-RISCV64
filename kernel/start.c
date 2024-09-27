@@ -7,16 +7,15 @@
 #include "../include/systemaddr.h"
 
 #include "mutex.h"
-
+const char * core0 = "I am core 0! \n";
+const char * core1 = "I am core 1! \n";
+const char * core2 = "I am core 2! \n";
+const char * core3 = "I am core 3! \n";
 mutex_t my_mutex;
 
 void shared_resource() {
     mutex_lock(&my_mutex);
-    
-    // Critical section: UART logging
     UART_SEND("Lock acquired, modifying shared resource...\n");
-
-    // Simulate some work
     for (volatile int i = 0; i < 1000000; i++);
 
     UART_SEND("Releasing lock...\n");
@@ -24,14 +23,10 @@ void shared_resource() {
     mutex_unlock(&my_mutex);
 }
 
-int main(){
-    mutex_init(&my_mutex);
+int start(){
+    // mutex_init(&my_mutex);
 
-    UART_SEND("Starting kernel...\n");
-
-    // Simulate concurrent access to a shared resource
-    shared_resource();
-    shared_resource();  // Test the locking mechanism
+    UART_SEND("Starting system...\n");
 
     Println();
     Println();
@@ -51,28 +46,29 @@ int main(){
 
 
 
+
 }
 
 void Core0_Init(){
     PrintChar(core0);
-        main();
+    PrintDigit(1234);
+
 }
 
 
 void Core1_Init(){
     PrintChar(core1);
-        main();
+    PrintDigit(1234);
 
 }
 
 void Core2_Init(){
     PrintChar(core2);
-        main();
+
 
 }
 
 void Core3_Init(){
     PrintChar(core3);
-        main();
 }
 
