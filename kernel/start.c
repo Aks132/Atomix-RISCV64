@@ -6,10 +6,32 @@
 #include "../include/libc/Wprintf.h"
 #include "../include/systemaddr.h"
 
+#include "mutex.h"
 
+mutex_t my_mutex;
+
+void shared_resource() {
+    mutex_lock(&my_mutex);
+    
+    // Critical section: UART logging
+    UART_SEND("Lock acquired, modifying shared resource...\n");
+
+    // Simulate some work
+    for (volatile int i = 0; i < 1000000; i++);
+
+    UART_SEND("Releasing lock...\n");
+
+    mutex_unlock(&my_mutex);
+}
 
 int main(){
-    
+    mutex_init(&my_mutex);
+
+    UART_SEND("Starting kernel...\n");
+
+    // Simulate concurrent access to a shared resource
+    shared_resource();
+    shared_resource();  // Test the locking mechanism
 
     Println();
     Println();
