@@ -12,7 +12,7 @@ int main()
  
 
     if(id == 0){
-    for(int i = 0; i > 10000000000 ; i++);
+    for(long i = 0; i > 100000000000 ; i++);
     PrintChar("I am 0 hart id starting main funt! \n");
    
     // for(long i = 0 ; i < 500000000 ; i++);
