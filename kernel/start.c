@@ -23,7 +23,7 @@ void Core1_Init(){
     PrintChar(core1);
     Println();
     mutex_unlock(&my_mutex);
-    main();
+    // main();
 }
 
 void Core2_Init(){
@@ -33,7 +33,7 @@ void Core2_Init(){
     PrintChar(core2);
     Println();
     mutex_unlock(&my_mutex);
-    main();
+    // main();
 }
 
 void Core3_Init(){
@@ -43,5 +43,5 @@ void Core3_Init(){
     PrintChar(core3);
     Println();
     mutex_unlock(&my_mutex);
-    main();
+    // main();
 }
