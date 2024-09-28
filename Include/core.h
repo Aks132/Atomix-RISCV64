@@ -13,4 +13,7 @@ void write_medeleg(unsigned long x); // for exception
 void write_mideleg(unsigned long x); // for interrupts
 unsigned long read_medeleg();
 unsigned long read_mideleg();
-
+void sie_write(unsigned long x );
+unsigned long sie_read();
+void pmpcfg0_write(unsigned long  x);
+void pmpaddr0_write(unsigned long  x);

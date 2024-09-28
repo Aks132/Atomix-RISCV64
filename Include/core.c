@@ -1,5 +1,9 @@
 #include <core.h>
 
+/*
+  This fiel contains all the c functions associated with the core register 
+
+*/
 unsigned long mhartid()
 {
   unsigned long x;
@@ -56,5 +60,25 @@ unsigned long read_mideleg(){
   asm volatile("csrr  %0, mideleg "  :  "=r" (x));
   return x;
 }
+void sie_write(unsigned long x )
+{
+  asm volatile("csrw sie, %0" : : "r" (x));
+}
 
+unsigned long sie_read(){
+  unsigned long x;
+  asm volatile("csrr %0, sie" : "=r" (x));
+  return x;
+}
+
+
+void pmpcfg0_write(unsigned long  x)
+{
+  asm volatile("csrw pmpcfg0, %0" : : "r" (x));
+}
+
+void pmpaddr0_write(unsigned long  x)
+{
+  asm volatile("csrw pmpaddr0, %0" : : "r" (x));
+}
 

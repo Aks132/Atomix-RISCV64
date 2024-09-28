@@ -10,6 +10,7 @@ mutex_t my_mutex;
 unsigned long id ;
 unsigned long var;
 unsigned long getMPP;
+unsigned long sieregister;
 
 
 void Start(){
@@ -44,7 +45,9 @@ void Start(){
         default: PrintChar("Unknown base ISA\n"); break;
     }// finally some use of switch case LOL
     
+
     PrintChar("Supported Extensions:\n");
+
     if (misa & (1UL << ('I' - 'A'))) PrintChar("  Extension: 'I' (Integer)\n");
     if (misa & (1UL << ('M' - 'A'))) PrintChar("  Extension: 'M' (Multiply/Divide)\n");
     if (misa & (1UL << ('A' - 'A'))) PrintChar("  Extension: 'A' (Atomic)\n");
@@ -59,10 +62,14 @@ void Start(){
     if (misa & (1UL << ('P' - 'A'))) PrintChar("  Extension: 'P' (Packed-SIMD)\n");
     if (misa & (1UL << ('H' - 'A'))) PrintChar("  Extension: 'H' (Hypervisor)\n");
     if (misa & (1UL << ('E' - 'A'))) PrintChar("  Extension: 'E' (Embedded Base Integer ISA)\n");
+    if (misa & (1UL << ('J' - 'A'))) PrintChar("  Extension: 'J' (Dynamic Translations)\n");
+    if (misa & (1UL << ('T' - 'A'))) PrintChar("  Extension: 'T' (Transaction Memory)\n");
+    if (misa & (1UL << ('L' - 'A'))) PrintChar("  Extension: 'L' (Decimal Floating Point)\n");
+    if (misa & (1UL << ('N' - 'A'))) PrintChar("  Extension: 'N' (User-level interrupts)\n");
+    if (misa & (1UL << ('X' - 'A'))) PrintChar("  Extension: 'X' (Non-standard extensions)\n");
+    if (misa & (1UL << ('Z' - 'A'))) PrintChar("  Extension: 'Z' (Standard extensions)\n");
 
-
-    /*
-        
+        /*
     For now we are operating in machine mode , now we can switch this into supervisor mode!
 
    */
@@ -99,8 +106,14 @@ void Start(){
 
     write_medeleg(0xFFFF);
     write_mideleg(0xFFFF);
+    sieregister = sie_read();
+    sieregister |((1UL << 1) | (1UL << 5) | (1UL << 9)); // enable 3 int for s mode
+    sie_write(sieregister |((1UL << 1) | (1UL << 5) | (1UL << 9)));
 
-    
+    // I also wanted to give OS access to whole memory and then implement pagin while in the supervisor mode
+    //https://www.reddit.com/r/RISCV/comments/otna8o/getting_into_supervisor_mode_with_paging_disabled/
+    pmpaddr0_write(0x3fffffffffffffull);
+    pmpcfg0_write(0xf);
     mret();
 
 }
