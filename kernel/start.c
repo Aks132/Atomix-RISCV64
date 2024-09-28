@@ -42,7 +42,7 @@ void Start(){
         case 1: PrintChar("Base ISA: RV64\n"); break;
         case 2: PrintChar("Base ISA: RV128\n"); break;
         default: PrintChar("Unknown base ISA\n"); break;
-    }// finally some use of switch case LOL!!
+    }// finally some use of switch case LOL
     
     PrintChar("Supported Extensions:\n");
     if (misa & (1UL << ('I' - 'A'))) PrintChar("  Extension: 'I' (Integer)\n");
@@ -78,19 +78,28 @@ void Start(){
 
 
     PrintChar("Going in supervisor mode\n");
+
+
+
     // SET THE PREVIOUS STATE TO SUPERVISOR MODE , PUTTING FN OF MAIN INSIDE mepc SO WHEN WE RETURN 
     var &= ~(3UL << 11); // 11 -> machine mode
     var |=  (1UL << 11) ; // 01 -> supervisor mode
     mstatus_write(var);
     set_mepc((unsigned long)main());
-    // var = mstatus_read();
-    // PrintDigit(var);
-    Println();Println();Println();
-    // getMPP = get_mpp();
-    // PrintDigit(getMPP);
+
     Println();Println();Println();
     // mret return from machine mode and enteres in the previous mode and start executing in the supervisor mode 
     // so the main will run inside supervisor mode!!
+
+
+    // We also dont wanted that someone will come as an exception and mess up our machine mode 
+    // so we tried to handle int / exception and redirect it to S - Mode instead of M - Mode
+    // If we set the bit all the bit of medeleg && mideleg we can redirect it to super visor mode
+    // each bit of these registers corresponds to int / exe .
+
+    write_medeleg(0xFFFF);
+    write_mideleg(0xFFFF);
+
     
     mret();
 

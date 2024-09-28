@@ -1,5 +1,5 @@
 #include "mutex.h"
-#include "stdbool.h"
+#include "../Include/libc/bool.h"
 
 /* chapter 7: of RISC-V-SPEC-v2.2 
 

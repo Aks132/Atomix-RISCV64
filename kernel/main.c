@@ -13,7 +13,7 @@ int main()
     while(1){
 
 
-        PrintChar(" I am in MAIN.C :)  \n\r ");
+        // PrintChar(" I am in MAIN.C :)  \n\r ");
     }
 
 

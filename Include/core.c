@@ -37,3 +37,24 @@ unsigned long misa_read(void) {
     
     return misa_value;
 }
+
+
+void write_medeleg(unsigned long x){
+  asm volatile("csrw medeleg , %0"  : :  "r" (x));
+}
+void write_mideleg(unsigned long x){
+  asm volatile("csrw mideleg , %0"  : :  "r" (x));
+}
+
+unsigned long read_medeleg(){
+  unsigned long x;
+  asm volatile("csrr %0, medeleg" : "=r" (x) );
+    return x;
+}
+unsigned long read_mideleg(){
+  unsigned long x;
+  asm volatile("csrr  %0, mideleg "  :  "=r" (x));
+  return x;
+}
+
+
