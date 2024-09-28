@@ -4,7 +4,7 @@ INCLUDE_DIR = ../include
 LIBC_DIR = $(INCLUDE_DIR)/libc
 
 # Compiler and linker flags
-CFLAGS = -mcmodel=medany -I$(INCLUDE_DIR) -I$(LIBC_DIR)
+CFLAGS = -mcmodel=medany -I$(INCLUDE_DIR) -I$(LIBC_DIR) -O0
 
 # Targets
 all: asm c link
@@ -23,7 +23,7 @@ link:
 	$(CROSS_COMPILE)ld -T linker.ld boot.o start.o print.o uart.o mutex.o main.o -o kernel.elf
 
 qemu:
-	qemu-system-riscv64 -machine virt -cpu rv64 -smp 2  -m 128 -nographic -serial mon:stdio -bios none  -kernel kernel.elf
+	qemu-system-riscv64 -machine virt -cpu rv64 -smp 4  -m 128 -nographic -serial mon:stdio -bios none  -kernel kernel.elf
 
 clean:
 	rm -f *.o *.elf

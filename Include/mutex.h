@@ -1,5 +1,4 @@
-#ifndef __MUTEX_H__
-#define __MUTEX_H__
+#pragma once
 
 typedef struct {
     volatile int lock;
@@ -10,4 +9,3 @@ void mutex_lock(mutex_t *mutex);
 int  mutex_trylock(mutex_t *mutex);
 void mutex_unlock(mutex_t *mutex);
 
-#endif

@@ -55,7 +55,7 @@ SECTIONS
  
   .stack : {
     PROVIDE(_stack_start = .);
-    . = . + 4096;
+    . = . + 4096*4;
     PROVIDE(_stack_end = .);
   } >ram AT>ram :stack 
 
