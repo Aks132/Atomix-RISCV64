@@ -70,8 +70,6 @@ unsigned long sie_read(){
   asm volatile("csrr %0, sie" : "=r" (x));
   return x;
 }
-
-
 void pmpcfg0_write(unsigned long  x)
 {
   asm volatile("csrw pmpcfg0, %0" : : "r" (x));
@@ -81,4 +79,11 @@ void pmpaddr0_write(unsigned long  x)
 {
   asm volatile("csrw pmpaddr0, %0" : : "r" (x));
 }
-
+unsigned long satp_read(){
+  unsigned long x;
+  asm volatile("csrr %0 , satp" : "=r" (x));
+  return x;
+}
+void satp_write(unsigned long x){
+  asm volatile("csrw satp , %0" : : "r" (x));
+}

@@ -5,16 +5,37 @@
 
 int main()
 {
-    
-    PrintChar("We are in  supervisor mode\n");
-    unsigned char mpp = get_mpp(); // this value is giving 0 ( but i am not sure it should give an erro or not)
-    PrintChar("Now ig we cant access mpp\n"); // because it is showing 0 !!
-    PrintChar("OK so everything is done");
-    while(1){
+    unsigned long mstatus = mstatus_read();  // Read the mstatus register
+    unsigned long current_privilege = ((mstatus >> 11) & 0x3);  // Extract the current privilege mode
+
+    if (current_privilege == 0x1) {
+        PrintChar("We are in Supervisor mode!\n");
+    } else if (current_privilege == 0x3) {
+        PrintChar("We are still in Machine mode - > some thing went. wrong pls reset \n");
+    } else if (current_privilege == 0x0) {
+        PrintChar("We are in User mode , something went wrong\n");
+    } 
 
 
-        // PrintChar(" I am in MAIN.C :)  \n\r ");
-    }
+    unsigned long readSATP = satp_read();
+    PrintDigit(readSATP);
+    satp_write(1<<3);
+    readSATP = satp_read();
+    PrintDigit(readSATP);
+
+// while(1){
+//     static unsigned long long i = 0;
+//     PrintDigit(i);
+//     PrintChar("\n\r");
+//     if(i%1000){
+//     PrintChar("We are in Supervisor mode!\n");
+
+//     }
+//     i++;
+
+// }
+
+ 
 
 
 }

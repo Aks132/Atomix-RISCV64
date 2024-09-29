@@ -84,7 +84,7 @@ void Start(){
     Println();Println();Println();
 
 
-    PrintChar("Going in supervisor mode\n");
+
 
 
 
@@ -115,6 +115,7 @@ void Start(){
     pmpaddr0_write(0x3fffffffffffffull);
     pmpcfg0_write(0xf);
     mret();
+
 
 }
 }

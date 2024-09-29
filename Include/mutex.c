@@ -11,6 +11,9 @@ rd: The register where the original value will be stored (in this case, result).
 %1 corresponds to *ptr (the memory address of the lock).
 %2 corresponds to newval (the value to be swapped in).
 
+link : https://gcc.gnu.org/onlinedocs/gcc-4.6.2/gcc/Atomic-Builtins.html
+
+
 */
 static inline int atomic_exchange(volatile int *ptr, int newval) {
     int result;
@@ -26,9 +29,9 @@ void mutex_init(mutex_t *mutex) {
 }
 
 void mutex_lock(mutex_t *mutex) {
-    while (atomic_exchange(&mutex->lock, 1) != 0) {
-        // Spin until the lock is acquired
-    }
+    while (atomic_exchange(&mutex->lock, 1) != 0);
+    __sync_synchronize (); 
+
 }
 
 int mutex_trylock(mutex_t *mutex) {
@@ -36,5 +39,8 @@ int mutex_trylock(mutex_t *mutex) {
 }
 
 void mutex_unlock(mutex_t *mutex) {
-    mutex->lock = 0;  // Release the lock
+    while (atomic_exchange(&mutex->lock, 1) == 0);  
+    __sync_synchronize (); 
+
+
 }

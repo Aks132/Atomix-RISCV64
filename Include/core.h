@@ -17,3 +17,5 @@ void sie_write(unsigned long x );
 unsigned long sie_read();
 void pmpcfg0_write(unsigned long  x);
 void pmpaddr0_write(unsigned long  x);
+unsigned long satp_read();
+void satp_write(unsigned long x);

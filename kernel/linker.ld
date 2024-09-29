@@ -60,5 +60,5 @@ SECTIONS
   } >ram AT>ram :stack 
 
 }
-
+    PROVIDE(_end_ = .);
     PROVIDE(_memory_start = ORIGIN(ram));
