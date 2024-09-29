@@ -1,15 +1,10 @@
 #include "../Include/memAlloc.h"
 
-// #define BASEADDDRKERNEL 0x80000000L
-const unsigned long BASEADDDRKERNEL =  0x80000000;
 
- unsigned long KERNELEND = BASEADDDRKERNEL + (1024*1024*128);
-const unsigned long PAGE_SIZE      = 4096;
-
-
-extern unsigned long _end_;
-extern unsigned long _text_start;
-#define test 10000
+extern unsigned long _end_[];
+extern unsigned long FINAL_END[];
+extern unsigned long _text_start[];
+#define test 0x10000
 int nu_of_pages;
 inline unsigned long mem_round_upto_pages(unsigned long memTobeAllign) {
     return (memTobeAllign + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
@@ -19,18 +14,18 @@ void PageTraversal(void *physicalADDRstart , void* physicalADDRend){
     char* currenttraversalPointer;
     currenttraversalPointer = (char*)mem_round_upto_pages((unsigned long) physicalADDRstart);
     char* endofaddr = (char*)physicalADDRend;
-    PrintChar("Start Address: ");
-    PrintDigit((unsigned long)currenttraversalPointer);
-    PrintChar(" End Address: ");
-    PrintDigit((unsigned long)endofaddr);
+    // PrintChar("Start Address: ");
+    // PrintDigit((unsigned long)currenttraversalPointer);
+    // PrintChar(" End Address: ");
+    // PrintDigit((unsigned long)endofaddr);
 
-
-    // for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
-    //     freememory(currenttraversalPointer);
-    //     PrintDigit(nu_of_pages++);
-    //     Println();
-    //     PrintChar("Going though pages\n");
-    // }
+    my_printf("I am ghre");
+    for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
+        freememory(currenttraversalPointer);
+        PrintDigit(nu_of_pages++);
+        Println();
+        PrintChar("Going though pages\n");
+    }
 
 }
 struct kernel_mem_manager memLock;
@@ -50,11 +45,18 @@ void freememory (void *mem){
 
 void kernel_mem_init(){
     // Initialise locks for mem handling !!
-    // mutex_init(&memLock.lock , "memelock");
+    mutex_init(&memLock.lock , "memelock");
     // We have to make mem amd specify the page table as till now we have not performed any mem operation!
+    // memLock.lock.lock = 1;
+    // my_printf("%d",memLock.lock);
+    // char* ptr = (char*)_end_;
+    // *ptr = 123;
+    // my_printf("%d\n",*ptr);
 
-    PrintDigit(BASEADDDRKERNEL);
-    Println();
-    // PrintHex(*basekernel);
-    // PageTraversal(_end_ , (void*)KERNELOND);
+    // my_printf("%p",&ptr);
+    my_printf("%p",test);
+    // my_printf("%d",((void*)_end_));
+    char *x = 0x88000000;
+    PageTraversal((void*)x, (void*)_end_);
+
 }

@@ -2,7 +2,11 @@
 #include "../Include/systemaddr.h"
 #include "../Include/mutex.h"
 #include "../Include/mutex.h"
+#include "../Include/libc/Wprintf.h"
 
+#define BASEADDDRKERNEL 0x80000000L
+#define KERNELEND 		(BASEADDDRKERNEL + (128*1024*1024))
+#define PAGE_SIZE 		(1UL < 11)
 
 void  *my_memset(void *b, int c, int len)
 {

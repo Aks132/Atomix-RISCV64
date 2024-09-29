@@ -18,15 +18,15 @@ void Start(){
     if(id == 0)
     {
     for(long i = 0; i > 100000000 ; i++);
-    PrintChar("I am 0 hart id starting main funt! \n");
+    my_printf("I am 0 hart id starting main funt! \n");
     // for(long i = 0 ; i < 500000000 ; i++);
-    // PrintChar("I am core 0 of main \n");
-    // PrintChar("From here we will only use signle core ");
+    // my_printf("I am core 0 of main \n");
+    // my_printf("From here we will only use signle core ");
     for(int i = 0; i > 100000000 ; i++);
         //after this none should print expects core 0 
-    PrintChar("I am only core 0 !!");
+    my_printf("I am only core 0 !!");
 
-   PrintChar("\n");PrintChar("\n");PrintChar("\n");PrintChar("\n");PrintChar("\n");
+   my_printf("\n");my_printf("\n");my_printf("\n");my_printf("\n");my_printf("\n");
 
    /*
 
@@ -39,35 +39,35 @@ void Start(){
     unsigned long base_isa = misa & 0x3; 
 
     switch(base_isa) {
-        case 0: PrintChar("Base ISA: RV32\n"); break;
-        case 1: PrintChar("Base ISA: RV64\n"); break;
-        case 2: PrintChar("Base ISA: RV128\n"); break;
-        default: PrintChar("Unknown base ISA\n"); break;
+        case 0: my_printf("Base ISA: RV32\n"); break;
+        case 1: my_printf("Base ISA: RV64\n"); break;
+        case 2: my_printf("Base ISA: RV128\n"); break;
+        default: my_printf("Unknown base ISA\n"); break;
     }// finally some use of switch case LOL
     
 
-    PrintChar("Supported Extensions:\n");
+    my_printf("Supported Extensions:\n");
 
-    if (misa & (1UL << ('I' - 'A'))) PrintChar("  Extension: 'I' (Integer)\n");
-    if (misa & (1UL << ('M' - 'A'))) PrintChar("  Extension: 'M' (Multiply/Divide)\n");
-    if (misa & (1UL << ('A' - 'A'))) PrintChar("  Extension: 'A' (Atomic)\n");
-    if (misa & (1UL << ('F' - 'A'))) PrintChar("  Extension: 'F' (Single-Precision Floating Point)\n");
-    if (misa & (1UL << ('D' - 'A'))) PrintChar("  Extension: 'D' (Double-Precision Floating Point)\n");
-    if (misa & (1UL << ('C' - 'A'))) PrintChar("  Extension: 'C' (Compressed Instructions)\n");
-    if (misa & (1UL << ('S' - 'A'))) PrintChar("  Extension: 'S' (Supervisor Mode)\n");
-    if (misa & (1UL << ('U' - 'A'))) PrintChar("  Extension: 'U' (User Mode)\n");
-    if (misa & (1UL << ('Q' - 'A'))) PrintChar("  Extension: 'Q' (Quad-Precision Floating Point)\n");
-    if (misa & (1UL << ('V' - 'A'))) PrintChar("  Extension: 'V' (Vector Operations)\n");
-    if (misa & (1UL << ('B' - 'A'))) PrintChar("  Extension: 'B' (Bit Manipulation)\n");
-    if (misa & (1UL << ('P' - 'A'))) PrintChar("  Extension: 'P' (Packed-SIMD)\n");
-    if (misa & (1UL << ('H' - 'A'))) PrintChar("  Extension: 'H' (Hypervisor)\n");
-    if (misa & (1UL << ('E' - 'A'))) PrintChar("  Extension: 'E' (Embedded Base Integer ISA)\n");
-    if (misa & (1UL << ('J' - 'A'))) PrintChar("  Extension: 'J' (Dynamic Translations)\n");
-    if (misa & (1UL << ('T' - 'A'))) PrintChar("  Extension: 'T' (Transaction Memory)\n");
-    if (misa & (1UL << ('L' - 'A'))) PrintChar("  Extension: 'L' (Decimal Floating Point)\n");
-    if (misa & (1UL << ('N' - 'A'))) PrintChar("  Extension: 'N' (User-level interrupts)\n");
-    if (misa & (1UL << ('X' - 'A'))) PrintChar("  Extension: 'X' (Non-standard extensions)\n");
-    if (misa & (1UL << ('Z' - 'A'))) PrintChar("  Extension: 'Z' (Standard extensions)\n");
+    if (misa & (1UL << ('I' - 'A'))) my_printf("  Extension: 'I' (Integer)\n");
+    if (misa & (1UL << ('M' - 'A'))) my_printf("  Extension: 'M' (Multiply/Divide)\n");
+    if (misa & (1UL << ('A' - 'A'))) my_printf("  Extension: 'A' (Atomic)\n");
+    if (misa & (1UL << ('F' - 'A'))) my_printf("  Extension: 'F' (Single-Precision Floating Point)\n");
+    if (misa & (1UL << ('D' - 'A'))) my_printf("  Extension: 'D' (Double-Precision Floating Point)\n");
+    if (misa & (1UL << ('C' - 'A'))) my_printf("  Extension: 'C' (Compressed Instructions)\n");
+    if (misa & (1UL << ('S' - 'A'))) my_printf("  Extension: 'S' (Supervisor Mode)\n");
+    if (misa & (1UL << ('U' - 'A'))) my_printf("  Extension: 'U' (User Mode)\n");
+    if (misa & (1UL << ('Q' - 'A'))) my_printf("  Extension: 'Q' (Quad-Precision Floating Point)\n");
+    if (misa & (1UL << ('V' - 'A'))) my_printf("  Extension: 'V' (Vector Operations)\n");
+    if (misa & (1UL << ('B' - 'A'))) my_printf("  Extension: 'B' (Bit Manipulation)\n");
+    if (misa & (1UL << ('P' - 'A'))) my_printf("  Extension: 'P' (Packed-SIMD)\n");
+    if (misa & (1UL << ('H' - 'A'))) my_printf("  Extension: 'H' (Hypervisor)\n");
+    if (misa & (1UL << ('E' - 'A'))) my_printf("  Extension: 'E' (Embedded Base Integer ISA)\n");
+    if (misa & (1UL << ('J' - 'A'))) my_printf("  Extension: 'J' (Dynamic Translations)\n");
+    if (misa & (1UL << ('T' - 'A'))) my_printf("  Extension: 'T' (Transaction Memory)\n");
+    if (misa & (1UL << ('L' - 'A'))) my_printf("  Extension: 'L' (Decimal Floating Point)\n");
+    if (misa & (1UL << ('N' - 'A'))) my_printf("  Extension: 'N' (User-level interrupts)\n");
+    if (misa & (1UL << ('X' - 'A'))) my_printf("  Extension: 'X' (Non-standard extensions)\n");
+    if (misa & (1UL << ('Z' - 'A'))) my_printf("  Extension: 'Z' (Standard extensions)\n");
 
         /*
     For now we are operating in machine mode , now we can switch this into supervisor mode!
@@ -125,7 +125,7 @@ void Core0_Init(){
     mutex_lock(&my_mutex);
     Println();
     Println();
-    PrintChar(core0);
+    my_printf("%s",core0);
     Println();
     Println();
     mutex_unlock(&my_mutex);
@@ -137,7 +137,7 @@ void Core1_Init(){
 
     Println();
     Println();
-    PrintChar(core1);
+    my_printf("%s",core1);
     Println();
     Println();
     mutex_unlock(&my_mutex);
@@ -148,7 +148,7 @@ void Core2_Init(){
     mutex_lock(&my_mutex);
     Println();
     Println();
-    PrintChar(core2);
+   my_printf("%s",core2);
     Println();
     Println();
     mutex_unlock(&my_mutex);
@@ -160,7 +160,7 @@ void Core3_Init(){
 
     Println();
     Println();
-    PrintChar(core3);
+   my_printf("%s",core3);
     Println();
     Println();
     mutex_unlock(&my_mutex);

@@ -9,11 +9,11 @@ int main()
     unsigned long current_privilege = ((mstatus >> 11) & 0x3);  // Extract the current privilege mode
 
     if (current_privilege == 0x1) {
-        PrintChar("We are in Supervisor mode!\n");
+        my_printf("We are in Supervisor mode!\n");
     } else if (current_privilege == 0x3) {
-        PrintChar("We are still in Machine mode - > some thing went. wrong pls reset \n");
+        my_printf("We are still in Machine mode - > some thing went. wrong pls reset \n");
     } else if (current_privilege == 0x0) {
-        PrintChar("We are in User mode , something went wrong\n");
+        my_printf("We are in User mode , something went wrong\n");
     } 
 
 
@@ -22,7 +22,9 @@ int main()
     // satp_write(1<<3);
     // readSATP = satp_read();
     // PrintDigit(readSATP);
-    // kernel_mem_init();
+    kernel_mem_init();
+
+    my_printf("I am printF");
 
 
  
