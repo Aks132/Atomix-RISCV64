@@ -19,9 +19,10 @@ c:
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/uart.c -c -o uart.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/mutex.c -c -o mutex.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/core.c -c -o core.o
+	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/memAlloc.c -c -o memAlloc.o
 
 link:
-	$(CROSS_COMPILE)ld -T linker.ld boot.o start.o print.o uart.o mutex.o main.o core.o -o kernel.elf
+	$(CROSS_COMPILE)ld -T linker.ld boot.o start.o print.o uart.o mutex.o main.o memAlloc.o core.o -o kernel.elf
 
 qemu:
 	qemu-system-riscv64 -machine virt -cpu rv64 -smp 4  -m 128 -nographic -serial mon:stdio -bios none  -kernel kernel.elf

@@ -22,6 +22,7 @@ int main()
     // satp_write(1<<3);
     // readSATP = satp_read();
     // PrintDigit(readSATP);
+    // kernel_mem_init();
 
 
  

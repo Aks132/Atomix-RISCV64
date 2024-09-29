@@ -5,9 +5,10 @@ status_t PrintChar(const char * x){
       UART_SEND(x);
       return SUCCESS;
 }
-status_t PrintDigit(const int number){
+status_t PrintDigit(const unsigned long number){
   char str[100];
   UART_SEND(itoa(number, str, 10));
+  return SUCCESS;
 }
 status_t PrintHex(const int number){
     char str[100];

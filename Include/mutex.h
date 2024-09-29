@@ -1,6 +1,6 @@
 #pragma once
 
-typedef struct {
+typedef struct mutex{
     volatile int lock;
     char* name ;
 } mutex_t;

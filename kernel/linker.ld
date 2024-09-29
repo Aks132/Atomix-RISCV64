@@ -5,7 +5,7 @@ ENTRY(_entry)
 
 MEMORY
 {
-  ram  (wxa) : ORIGIN = 0x80000000, LENGTH = 256M
+  ram  (wxa) : ORIGIN = 0x80000000, LENGTH = 128M
 }
 
 /*
@@ -25,7 +25,7 @@ PHDRS
 */
 SECTIONS
 {
-
+   . = 0x80000000;
   .text : {
     PROVIDE(_text_start = .);
     *(*)
@@ -60,5 +60,5 @@ SECTIONS
   } >ram AT>ram :stack 
 
 }
-    PROVIDE(_end_ = .);
+    PROVIDE(_end_ = 0x80010000);
     PROVIDE(_memory_start = ORIGIN(ram));
