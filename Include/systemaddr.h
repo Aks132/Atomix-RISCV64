@@ -1,2 +1,7 @@
+#define BASEADDDRKERNEL 0x80000000
+#define KERNELEND 		(BASEADDDRKERNEL + (256*1024*1024))
+
+
+
 #define      UART_TX_ADDR      0x10000000UL
 void UART_SEND(const char *str);

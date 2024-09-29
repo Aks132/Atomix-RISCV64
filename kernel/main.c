@@ -17,23 +17,12 @@ int main()
     } 
 
 
-    unsigned long readSATP = satp_read();
-    PrintDigit(readSATP);
-    satp_write(1<<3);
-    readSATP = satp_read();
-    PrintDigit(readSATP);
+    // unsigned long readSATP = satp_read();
+    // PrintDigit(readSATP);
+    // satp_write(1<<3);
+    // readSATP = satp_read();
+    // PrintDigit(readSATP);
 
-// while(1){
-//     static unsigned long long i = 0;
-//     PrintDigit(i);
-//     PrintChar("\n\r");
-//     if(i%1000){
-//     PrintChar("We are in Supervisor mode!\n");
-
-//     }
-//     i++;
-
-// }
 
  
 

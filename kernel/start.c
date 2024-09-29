@@ -118,12 +118,15 @@ void Start(){
 
 
 }
+
 }
 
 void Core0_Init(){
     mutex_lock(&my_mutex);
     Println();
+    Println();
     PrintChar(core0);
+    Println();
     Println();
     mutex_unlock(&my_mutex);
     Start();
@@ -133,7 +136,9 @@ void Core1_Init(){
     mutex_lock(&my_mutex);
 
     Println();
+    Println();
     PrintChar(core1);
+    Println();
     Println();
     mutex_unlock(&my_mutex);
     // main();
@@ -141,9 +146,10 @@ void Core1_Init(){
 
 void Core2_Init(){
     mutex_lock(&my_mutex);
-
+    Println();
     Println();
     PrintChar(core2);
+    Println();
     Println();
     mutex_unlock(&my_mutex);
     // main();
@@ -153,7 +159,9 @@ void Core3_Init(){
     mutex_lock(&my_mutex);
 
     Println();
+    Println();
     PrintChar(core3);
+    Println();
     Println();
     mutex_unlock(&my_mutex);
     // main();

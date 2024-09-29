@@ -1,5 +1,5 @@
 #include <core.h>
-
+#include "../Include/libc/Wprintf.h"
 /*
   This fiel contains all the c functions associated with the core register 
 
@@ -87,3 +87,21 @@ unsigned long satp_read(){
 void satp_write(unsigned long x){
   asm volatile("csrw satp , %0" : : "r" (x));
 }
+void sstatus_write(unsigned long x){
+  asm volatile("csrw sstatus , %0" : : "r" (x));
+}
+inline unsigned long sstatus_read(){
+  unsigned long x;
+  asm volatile("csrr %0 ,sstatus" : "=r" (x));
+  return x;
+}
+void EnableInterrupt(){
+  sstatus_write(sstatus_read() | (1UL << 1));
+  PrintChar("Interupt enabled\n");
+}
+void DisableInterrupt(){
+
+  sstatus_write(sstatus_read() & ~(1UL << 1));
+  PrintChar("Interupt diabled\n");
+}
+

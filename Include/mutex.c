@@ -1,5 +1,6 @@
 #include "mutex.h"
 #include "../Include/libc/bool.h"
+#include "../Include/core.h"
 
 /* chapter 7: of RISC-V-SPEC-v2.2 
 
@@ -24,13 +25,17 @@ static inline int atomic_exchange(volatile int *ptr, int newval) {
     return result;
 }
 
-void mutex_init(mutex_t *mutex) {
+void mutex_init(mutex_t *mutex , char*  name) {
     mutex->lock = 0;  // 0 means unlocked
+    mutex->name = name;
 }
 
-void mutex_lock(mutex_t *mutex) {
-    while (atomic_exchange(&mutex->lock, 1) != 0);
-    __sync_synchronize (); 
+void mutex_lock(mutex_t  *mutex)
+{
+  DisableInterrupt();
+  while(__sync_lock_test_and_set(&mutex->lock, 1) != 0);
+  __sync_synchronize();
+  EnableInterrupt();
 
 }
 
@@ -39,7 +44,7 @@ int mutex_trylock(mutex_t *mutex) {
 }
 
 void mutex_unlock(mutex_t *mutex) {
-    while (atomic_exchange(&mutex->lock, 1) == 0);  
+    mutex->lock = 0; // Correctly release the lock
     __sync_synchronize (); 
 
 

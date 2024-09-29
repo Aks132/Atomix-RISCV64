@@ -19,3 +19,7 @@ void pmpcfg0_write(unsigned long  x);
 void pmpaddr0_write(unsigned long  x);
 unsigned long satp_read();
 void satp_write(unsigned long x);
+void sstatus_write(unsigned long x);
+unsigned long sstatus_read();
+void DisableInterrupt();
+void EnableInterrupt();
