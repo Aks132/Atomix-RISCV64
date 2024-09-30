@@ -3,6 +3,7 @@
 
 
 
+
 int main()
 {
     unsigned long mstatus = mstatus_read();  // Read the mstatus register
@@ -24,10 +25,8 @@ int main()
     // PrintDigit(readSATP);
     kernel_mem_init();
 
-    my_printf("I am printF");
+    my_printf("I am printF \n");
 
-
- 
-
+    poweroff();
 
 }

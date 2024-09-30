@@ -1,6 +1,6 @@
 #include "start.h"
-#include "../Include/mutex.h"
-#include "../Include/core.h"
+#include "../Include/mutex/mutex.h"
+#include "../Include/core/core.h"
 const char * core0 = "I am core 0! \n";
 const char * core1 = "I am core 1! \n";
 const char * core2 = "I am core 2! \n";
