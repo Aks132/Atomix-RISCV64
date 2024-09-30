@@ -1,0 +1,197 @@
+
+There are no discarded input sections
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x0000000080000000 0x0000000008000000 axrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000080000000                . = 0x80000000
+
+.text           0x0000000080000000     0x132f
+                [!provide]                        PROVIDE (_text_start = .)
+ *(*)
+ .text          0x0000000080000000       0xa8 ../build/boot.o
+                0x0000000080000000                _entry
+ .data          0x00000000800000a8       0x10 ../build/boot.o
+                0x00000000800000a8                hartid0
+                0x00000000800000ac                hartid1
+                0x00000000800000b0                hartid2
+                0x00000000800000b4                hartid3
+ .bss           0x00000000800000b8        0x0 ../build/boot.o
+ .riscv.attributes
+                0x00000000800000b8       0x50 ../build/boot.o
+ .rela.text     0x0000000080000108        0x0 ../build/boot.o
+ .text          0x0000000080000108      0x212 ../build/print.o
+                0x0000000080000108                PrintChar
+                0x0000000080000122                Println
+                0x000000008000012e                reverse
+                0x0000000080000164                itoa
+                0x00000000800001f4                PrintDigit
+                0x000000008000020e                PrintHex
+                0x0000000080000226                my_printf
+ .data          0x000000008000031a        0x0 ../build/print.o
+ .bss           0x000000008000031a        0x0 ../build/print.o
+ *fill*         0x000000008000031a        0x2 
+ .rodata        0x000000008000031c       0x58 ../build/print.o
+ .comment       0x0000000080000374       0x19 ../build/print.o
+                                         0x1a (size before relaxing)
+ .riscv.attributes
+                0x000000008000038d       0x47 ../build/print.o
+ .text          0x00000000800003d4       0x18 ../build/uart.o
+                0x00000000800003d4                UART_SEND
+ .data          0x00000000800003ec        0x0 ../build/uart.o
+ .bss           0x00000000800003ec        0x0 ../build/uart.o
+ .comment       0x00000000800003ec       0x1a ../build/uart.o
+ .riscv.attributes
+                0x00000000800003ec       0x47 ../build/uart.o
+ *fill*         0x0000000080000433        0x1 
+ .text          0x0000000080000434       0x4a ../build/mutex.o
+                0x0000000080000434                mutex_init
+                0x000000008000043c                mutex_lock
+                0x0000000080000464                mutex_trylock
+                0x0000000080000474                mutex_unlock
+ .data          0x000000008000047e        0x0 ../build/mutex.o
+ .bss           0x000000008000047e        0x0 ../build/mutex.o
+ .comment       0x000000008000047e       0x1a ../build/mutex.o
+ .riscv.attributes
+                0x000000008000047e       0x47 ../build/mutex.o
+ *fill*         0x00000000800004c5        0x1 
+ .text          0x00000000800004c6      0x142 ../build/memAlloc.o
+                0x00000000800004c6                my_memset
+                0x0000000080000514                mem_round_upto_pages
+                0x0000000080000516                freememory
+                0x0000000080000564                PageTraversal
+                0x00000000800005cc                kernel_mem_init
+ .data          0x0000000080000608        0x0 ../build/memAlloc.o
+ *fill*         0x0000000080000608        0x0 
+ .bss           0x0000000080000608       0x18 ../build/memAlloc.o
+                0x0000000080000608                memLock
+ .rodata.str1.8
+                0x0000000080000620      0x5c6 ../build/memAlloc.o
+                                         0x63 (size before relaxing)
+ *fill*         0x0000000080000be6        0x2 
+ .sbss          0x0000000080000be8        0x4 ../build/memAlloc.o
+                0x0000000080000be8                nu_of_pages
+ .comment       0x0000000080000bec       0x1a ../build/memAlloc.o
+ .riscv.attributes
+                0x0000000080000bec       0x47 ../build/memAlloc.o
+ *fill*         0x0000000080000c33        0x1 
+ .text          0x0000000080000c34       0xbe ../build/core.o
+                0x0000000080000c34                mhartid
+                0x0000000080000c3a                mstatus_read
+                0x0000000080000c40                mstatus_write
+                0x0000000080000c46                set_mepc
+                0x0000000080000c4c                mret
+                0x0000000080000c52                get_mpp
+                0x0000000080000c5a                misa_read
+                0x0000000080000c60                write_medeleg
+                0x0000000080000c66                write_mideleg
+                0x0000000080000c6c                read_medeleg
+                0x0000000080000c72                read_mideleg
+                0x0000000080000c78                sie_write
+                0x0000000080000c7e                sie_read
+                0x0000000080000c84                pmpcfg0_write
+                0x0000000080000c8a                pmpaddr0_write
+                0x0000000080000c90                satp_read
+                0x0000000080000c96                satp_write
+                0x0000000080000c9c                sstatus_write
+                0x0000000080000ca2                sstatus_read
+                0x0000000080000ca8                EnableInterrupt
+                0x0000000080000cce                DisableInterrupt
+ .data          0x0000000080000cf2        0x0 ../build/core.o
+ .bss           0x0000000080000cf2        0x0 ../build/core.o
+ .rodata.str1.8
+                0x0000000080000cf2       0x2a ../build/core.o
+ .comment       0x0000000080000cf2       0x1a ../build/core.o
+ .riscv.attributes
+                0x0000000080000cf2       0x4b ../build/core.o
+ *fill*         0x0000000080000d3d        0x1 
+ .text          0x0000000080000d3e       0x44 ../build/syscon.o
+                0x0000000080000d3e                poweroff
+                0x0000000080000d60                reboot
+ .data          0x0000000080000d82        0x0 ../build/syscon.o
+ .bss           0x0000000080000d82        0x0 ../build/syscon.o
+ .rodata.str1.8
+                0x0000000080000d82       0x29 ../build/syscon.o
+ .comment       0x0000000080000d82       0x1a ../build/syscon.o
+ .riscv.attributes
+                0x0000000080000d82       0x47 ../build/syscon.o
+ *fill*         0x0000000080000dc9        0x1 
+ .text          0x0000000080000dca      0x420 ../build/start.o
+                0x0000000080000dca                Start
+                0x00000000800010ce                Core0_Init
+                0x0000000080001118                Core1_Init
+                0x000000008000115e                Core2_Init
+                0x00000000800011a4                Core3_Init
+ .data          0x00000000800011ea        0x0 ../build/start.o
+ *fill*         0x00000000800011ea        0x6 
+ .bss           0x00000000800011f0       0x10 ../build/start.o
+                0x00000000800011f0                my_mutex
+ .rodata.str1.8
+                0x0000000080001200      0x44f ../build/start.o
+ .sbss          0x0000000080001200       0x20 ../build/start.o
+                0x0000000080001200                sieregister
+                0x0000000080001208                getMPP
+                0x0000000080001210                var
+                0x0000000080001218                id
+ .sdata         0x0000000080001220       0x20 ../build/start.o
+                0x0000000080001220                core3
+                0x0000000080001228                core2
+                0x0000000080001230                core1
+                0x0000000080001238                core0
+ .comment       0x0000000080001240       0x1a ../build/start.o
+ .riscv.attributes
+                0x0000000080001240       0x47 ../build/start.o
+ *fill*         0x0000000080001287        0x1 
+ .text          0x0000000080001288       0x60 ../build/main.o
+                0x0000000080001288                main
+ .data          0x00000000800012e8        0x0 ../build/main.o
+ .bss           0x00000000800012e8        0x0 ../build/main.o
+ .rodata.str1.8
+                0x00000000800012e8       0xa6 ../build/main.o
+ .comment       0x00000000800012e8       0x1a ../build/main.o
+ .riscv.attributes
+                0x00000000800012e8       0x47 ../build/main.o
+                [!provide]                        PROVIDE (_text_end = .)
+                [!provide]                        PROVIDE (_global_pointer = .)
+
+.rodata         0x000000008000132f        0x0
+                [!provide]                        PROVIDE (_rodata_start = .)
+ *(.rodata .rodata.*)
+                [!provide]                        PROVIDE (_rodata_end = .)
+
+.data           0x000000008000132f      0xcd1
+                0x0000000080002000                . = ALIGN (0x1000)
+ *fill*         0x000000008000132f      0xcd1 
+                [!provide]                        PROVIDE (_data_start = .)
+ *(.sdata .sdata.*)
+ *(.data .data.*)
+                [!provide]                        PROVIDE (_data_end = .)
+
+.bss            0x0000000080002000        0x0
+                [!provide]                        PROVIDE (_bss_start = .)
+ *(.sbss .sbss.*)
+ *(.bss .bss.*)
+                [!provide]                        PROVIDE (_bss_end = .)
+
+.stack          0x0000000080002000     0x4000
+                [!provide]                        PROVIDE (_stack_start = .)
+                0x0000000080006000                . = (. + 0x4000)
+ *fill*         0x0000000080002000     0x4000 
+                0x0000000080006000                PROVIDE (_stack_end = .)
+                0x0000000080006000                PROVIDE (_end_ = .)
+                [!provide]                        PROVIDE (_memory_start = ORIGIN (ram))
+LOAD ../build/boot.o
+LOAD ../build/print.o
+LOAD ../build/uart.o
+LOAD ../build/mutex.o
+LOAD ../build/memAlloc.o
+LOAD ../build/core.o
+LOAD ../build/syscon.o
+LOAD ../build/start.o
+LOAD ../build/main.o
+OUTPUT(../build/kernel.elf elf64-littleriscv)
