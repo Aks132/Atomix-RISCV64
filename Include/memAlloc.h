@@ -1,7 +1,6 @@
 #pragma once
-#include "../Include/systemaddr.h"
-#include "../Include/mutex.h"
-#include "../Include/mutex.h"
+#include "../Include/uart/uart.h"
+#include "../Include/mutex/mutex.h"
 #include "../Include/libc/Wprintf.h"
 
 #define BASEADDDRKERNEL 0x80000000L

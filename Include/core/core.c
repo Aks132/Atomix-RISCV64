@@ -1,5 +1,5 @@
-#include <core.h>
-#include "../Include/libc/Wprintf.h"
+#include "core.h"
+#include "../include/libc/Wprintf.h"
 /*
   This fiel contains all the c functions associated with the core register 
 
