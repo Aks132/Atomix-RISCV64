@@ -97,11 +97,11 @@ inline unsigned long sstatus_read(){
 }
 void EnableInterrupt(){
   sstatus_write(sstatus_read() | (1UL << 1));
-  PrintChar("Interupt enabled\n");
+  my_printf("Interupt enabled\n");
 }
 void DisableInterrupt(){
 
   sstatus_write(sstatus_read() & ~(1UL << 1));
-  PrintChar("Interupt diabled\n");
+  my_printf("Interupt diabled\n");
 }
 

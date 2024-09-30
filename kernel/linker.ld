@@ -4,8 +4,13 @@ ENTRY(_entry)
 
 
 MEMORY
+<<<<<<< HEAD
 {
   ram  (rwxa) : ORIGIN = 0x80000000, LENGTH = 128M
+=======
+{                         
+  ram  (wxa) : ORIGIN = 0x80000000, LENGTH = 128M
+>>>>>>> 2c19c97 (ch)
 }
 
 /*
@@ -52,13 +57,17 @@ SECTIONS
     *(.sbss .sbss.*) *(.bss .bss.*)
     PROVIDE(_bss_end = .);
   } >ram AT>ram :bss
- 
+
+  PROVIDE(_end_ = .); 
+  
   .stack : {
     PROVIDE(_stack_start = .);
     . = . + 4096*4;
     PROVIDE(_stack_end = .);
   } >ram AT>ram :stack 
-  PROVIDE(_end_ = .);
-}
+
+} 
+  
+
     
     PROVIDE(_memory_start = ORIGIN(ram));

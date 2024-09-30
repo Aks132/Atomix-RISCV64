@@ -1,9 +1,12 @@
 #include "header.h"
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 2c19c97 (ch)
 int main()
 {
     unsigned long mstatus = mstatus_read();  // Read the mstatus register
@@ -24,8 +27,16 @@ int main()
     // readSATP = satp_read();
     // PrintDigit(readSATP);
     kernel_mem_init();
+    lib_puts("For now mem alloc is on break\n");
 
+<<<<<<< HEAD
     my_printf("I am printF \n");
+=======
+    lib_puts("startted");
+
+
+ 
+>>>>>>> 2c19c97 (ch)
 
     poweroff();
 
