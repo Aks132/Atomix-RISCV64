@@ -6,3 +6,4 @@
 #include "../include/uart/uart.h"
 #include "../include/core/core.h"
 #include "../include/syscon/syscon.h"
+#include "../Include/memAlloc.h"

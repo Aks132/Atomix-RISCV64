@@ -1,7 +1,7 @@
 #include "../Include/memAlloc.h"
 
 
-extern unsigned long _end_[];
+extern unsigned long _end_;
 extern unsigned long FINAL_END[];
 extern unsigned long _text_start[];
 
@@ -29,8 +29,8 @@ void PageTraversal(void *physicalADDRstart , void* physicalADDRend){
     for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
         freememory(currenttraversalPointer);
         static int freememcall = 0;
-        my_printf(" currenttraversalPointer insiode for %d\n",(char*)currenttraversalPointer);
-        my_printf("Free memory function call counter %d\n" , freememcall++);
+        // my_printf(" currenttraversalPointer insiode for %d\n",(char*)currenttraversalPointer);
+        // my_printf("Free memory function call counter %d\n" , freememcall++);
     }
 
 }
@@ -40,12 +40,13 @@ void freememory (void *mem){
     TraverseThroughMemory_t *freemem;
     // mutex_lock(&memLock.lock);
     my_memset(mem,69,PAGE_SIZE);
-    Println();
     freemem = (struct TraverseThroughMemory *)mem;
-    lib_puts("Freeeing the tables\n");
+    // lib_puts("Freeeing the tables\n");
     freemem->next = memLock.freemem;
     memLock.freemem = freemem;
+    //freemem is poining to the last poiter in mem , and all thhe pages are linked withh linked list
     // mutex_unlock(&memLock.lock);
+    // my_printf("%d\n",freemem);
 
 }
 
@@ -64,6 +65,37 @@ void kernel_mem_init(){
     // my_printf("%d",((void*)_end_));
     // char *x = 0x88000000;
     // my_printf("%d",x);
-    PageTraversal((void*)_end_, (void*)KERNELEND);
+    PageTraversal((void*)&_end_, (void*)KERNELEND);
  
+}
+
+void* memory_alloc(){
+    TraverseThroughMemory_t *freemem;
+
+    freemem = memLock.freemem;
+    if(freemem) // if freemem is not pointing to 0 that means we have pages to allocate mem
+    {
+        // allocate page and set freemem->next pointer to next location
+        // that means previous page is used 
+        memLock.freemem = freemem->next;
+        my_memset((char*)freemem , 69 , PAGE_SIZE); // to debug !
+    }
+
+    return (void *)freemem;
+
+}
+
+void  *my_memset(void *b, int c, int len)
+{
+  int           i;
+  unsigned char *p = b;
+  i = 0;
+  while(len > 0)
+    {
+      // my_printf(" i am in memset\n");
+      *p = c;
+      p++;
+      len--;
+    }
+  return(b);
 }

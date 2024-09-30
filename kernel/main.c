@@ -26,11 +26,11 @@ int main()
 
     my_printf("I am printF \n");
 
-    lib_puts("startted");
+    lib_puts("startted\n");
 
 
 
-
+    poweroff();
     // reboot();
 
 }
