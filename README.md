@@ -1,8 +1,12 @@
-# RISC-V GNU Toolchain Installation on macOS
+# Atomix-RISCV64
+
+Atomix-RISCV64 is an operating system built from scratch targeting the RISC-V 64-bit architecture. The project focuses on learning, implementing fundamental OS concepts, and enabling multi-hart support in a bare-metal environment. It uses the RISC-V GNU toolchain for development and QEMU for emulation on macOS.
+
+## RISC-V GNU Toolchain Installation on macOS
 
 This guide explains how to install the RISC-V GNU toolchain on macOS using Homebrew, allowing you to develop and run RISC-V programs in an emulated environment.
 
-## Prerequisites
+### Prerequisites
 
 Before starting, ensure that you have the following:
 
@@ -41,5 +45,8 @@ If the toolchain is set up correctly, you should see version information for bot
 
 
 ## TODO;
-- [x] Core Locking
+- [ ] Core Locking
 - [ ] Memory Mapping
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
