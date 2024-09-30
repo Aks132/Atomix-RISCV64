@@ -44,6 +44,7 @@ CFLAGS = -mcmodel=medany -O -I$(INCLUDE_DIR) -I$(LIBC_DIR)
 
 # Create build directory if it doesn't exist
 $(BUILD_DIR):
+	rm -f $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
 
 # Targets
