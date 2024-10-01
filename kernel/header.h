@@ -7,3 +7,4 @@
 #include "../include/core/core.h"
 #include "../include/syscon/syscon.h"
 #include "../Include/memAlloc.h"
+#include "../Include/pages.h"

@@ -15,11 +15,7 @@ int main()
     } 
 
 
-    // unsigned long readSATP = satp_read();
-    // PrintDigit(readSATP);
-    // satp_write(1<<3);
-    // readSATP = satp_read();
-    // PrintDigit(readSATP);
+
     kernel_mem_init();
     lib_puts("For now mem alloc is on break\n");
 
@@ -28,7 +24,7 @@ int main()
 
     lib_puts("startted\n");
 
-
+    SetupPaging();
 
     poweroff();
     // reboot();
