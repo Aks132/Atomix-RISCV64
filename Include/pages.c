@@ -145,7 +145,7 @@ void SetupPaging() {
     my_printf("Current SATP value: %x\n", readSATP);
 
     unsigned long* root_page_table = makepagetable();
-    map_page(root_page_table, (unsigned long)0x10000000, (unsigned long)0x10000000, ((1 << 2) | (1 << 1)));  // Example mapping with RW permissions
+    map_page(root_page_table, (unsigned long)UART_TX_ADDR, (unsigned long)UART_TX_ADDR, ((1 << 2) | (1 << 1)));  // Example mapping with RW permissions
 
     unsigned long satp_value = (((unsigned long)root_page_table >> 12) | (0x8UL << 60));  // Set Sv39 mode and root page table
     satp_write(satp_value);
@@ -153,7 +153,7 @@ void SetupPaging() {
 
     Println();
     my_printf("Verifying page table entry:\n");
-    verify_page_table_entry(root_page_table, (unsigned long)0x10000000);
+    verify_page_table_entry(root_page_table, (unsigned long)UART_TX_ADDR);
 }
 
 unsigned long* makepagetable() {
@@ -161,6 +161,7 @@ unsigned long* makepagetable() {
 
     my_printf("Allocating new page table...\n");
     pagetabledatastruct = (unsigned long*)memory_alloc();  // Allocate memory for the page table
+    my_printf("pagetabledatastruct : %d\n",pagetabledatastruct);
     my_memset(pagetabledatastruct, 0, PAGE_SIZE);  // Initialize the page table with zeros
 
     my_printf("Page table creation done\n");
@@ -190,11 +191,11 @@ void map_page(unsigned long* pagetabledatastruct, unsigned long virtualAddr, uns
     if ((Level2PageTable[VPN[1]] & 0x01) == 0) {
         Level2PageTable[VPN[1]] = ((unsigned long)makepagetable()) >> 12;
         Level2PageTable[VPN[1]] |= (1 << 0);  // Set valid bit
-        my_printf("Allocated Level 3 page table at: %d\n", Level2PageTable[VPN[1]] << 12);
+        my_printf("Allocated Level 3 page table at: %d\n", *Level2PageTable << 12);
     }
 
     // Level 3 page table (VPN[0])
-    unsigned long* Level3PageTable = (unsigned long*)(Level2PageTable[VPN[1]] << 12);
+    unsigned long* Level3PageTable = (unsigned long*)(Level2PageTable[VPN[0]] << 12);
     Level3PageTable[VPN[0]] = (physicAddr >> 12) | permissionBits | (1 << 0);  // Map VA to PA with flags
 
     my_printf("Mapped VA %x to PA %x with permissions %x\n", virtualAddr, physicAddr, permissionBits);
@@ -233,6 +234,16 @@ void verify_page_table_entry(unsigned long* root_page_table, unsigned long virtu
     }
     unsigned long pa = ((level3_table[VPN[0]] & ~0xFFF) << 12); 
     my_printf("physicall raw value  : %d\n" , level3_table) ;
-    my_printf("VA: %d\n", virtualAddr);
-    my_printf("PHY ADDR: %d\n" ,pa);
+   //0x88000000
+   //0x10000000 --> vma
+   //0x87000000 --> pma 
+   //0x87000000
+
+
+
+    // if( (0x88000000 - 0x10000000) == -pa){
+    	my_printf("physical addr is mapped to same of virtual addr \n");
+    	my_printf("VA: 0x%x\n", virtualAddr);
+    	my_printf("PHY ADDR: 0x%x\n" ,pa);
+    // }
 }
