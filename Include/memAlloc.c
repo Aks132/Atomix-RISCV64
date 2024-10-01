@@ -30,7 +30,7 @@ void PageTraversal(void *physicalADDRstart , void* physicalADDRend){
         freememory(currenttraversalPointer);
         static int freememcall = 0;
         // my_printf(" currenttraversalPointer insiode for %d\n",(char*)currenttraversalPointer);
-        // my_printf("Free memory function call counter %d\n" , freememcall++);
+        my_printf("Free memory function call counter %d\n" , freememcall++);
     }
 
 }
