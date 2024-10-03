@@ -27,12 +27,13 @@ PHDRS
     no need to do copy from phymem to vma , in qemu we can bypass that 
     which decrease copying overhead 
 */
+   . = 0x80000000;
 SECTIONS
 {
-   . = 0x80000000;
+
   .text : {
     PROVIDE(_text_start = .);
-    *(*)
+    *(.text .text.*)
     PROVIDE(_text_end = .);
   } >ram AT>ram :text
 
