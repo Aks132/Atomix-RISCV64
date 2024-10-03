@@ -15,18 +15,26 @@ int main()
     } 
 
 
-    // unsigned long readSATP = satp_read();
-    // PrintDigit(readSATP);
-    // satp_write(1<<3);
-    // readSATP = satp_read();
-    // PrintDigit(readSATP);
+
     kernel_mem_init();
     lib_puts("For now mem alloc is on break\n");
+<<<<<<< HEAD
 
     lib_puts("startted");
+=======
+>>>>>>> temp-branch
 
 
- 
+    my_printf("I am printF \n");
 
+    lib_puts("startted\n");
+
+    maketable();
+
+
+    
+
+    poweroff();
+    // reboot();
 
 }

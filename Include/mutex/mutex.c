@@ -1,6 +1,6 @@
 #include "mutex.h"
-#include "../Include/libc/bool.h"
-#include "../Include/core.h"
+#include "../include/libc/bool.h"
+#include "../include/core/core.h"
 
 /* chapter 7: of RISC-V-SPEC-v2.2 
 
@@ -32,7 +32,7 @@ void mutex_init(mutex_t *mutex , char*  name) {
 
 void mutex_lock(mutex_t  *mutex)
 {
-    DisableInterrupt();
+  DisableInterrupt();
   while(__sync_lock_test_and_set(&mutex->lock, 1) != 0);
   __sync_synchronize();
   EnableInterrupt();

@@ -1,5 +1,6 @@
 #pragma once
 
 
-#define      UART_TX_ADDR      0x10000000UL
+#define KERNBASE 0x80000000L
+
 void UART_SEND(const char *str);
