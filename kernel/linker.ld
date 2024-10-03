@@ -4,16 +4,12 @@ ENTRY(_entry)
 
 
 MEMORY
-<<<<<<< HEAD
-{                         
-  ram  (wxa) : ORIGIN = 0x80000000, LENGTH = 128M
-=======
 
 {
   ram  (rwxa) : ORIGIN = 0x80000000, LENGTH = 128M
 
 
->>>>>>> temp-branch
+
 }
 
 /*
@@ -63,23 +59,18 @@ SECTIONS
 
   } >ram AT>ram :bss
 
-<<<<<<< HEAD
-  PROVIDE(_end_ = .); 
-=======
->>>>>>> temp-branch
+
+  
+
   
   .stack : {
     PROVIDE(_stack_start = .);
     . = . + 4096*4;
     PROVIDE(_stack_end = .);
   } >ram AT>ram :stack 
-
+ PROVIDE(_end_ = .); 
 } 
-  
 
-<<<<<<< HEAD
-    
-=======
-        PROVIDE(_end_ = .); 
->>>>>>> temp-branch
+       
+
     PROVIDE(_memory_start = ORIGIN(ram));

@@ -18,11 +18,10 @@ int main()
 
     kernel_mem_init();
     lib_puts("For now mem alloc is on break\n");
-<<<<<<< HEAD
+
 
     lib_puts("startted");
-=======
->>>>>>> temp-branch
+
 
 
     my_printf("I am printF \n");

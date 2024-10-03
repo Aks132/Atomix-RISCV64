@@ -294,7 +294,7 @@ void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long
       break;
       
     }
-    my_printf("mapppig. .......%d to %d with perm %d\n ::" , virtAddr , phyAddr,perms);
+    // my_printf("mapppig. .......%d to %d with perm %d\n ::" , virtAddr , phyAddr,perms);
 
     start =  start + PAGE_SIZE;
     phyAddr =phyAddr  + PAGE_SIZE;
@@ -316,7 +316,7 @@ unsigned long* moveThroughPages(unsigned long * pages , unsigned long virtAddr ,
       *pte = (((((unsigned long)pages) >> 12) << 10)) | (1<<0);
     }
 	}
-	my_printf("mobe return %d\n" ,&pages[PX(0,virtAddr)] );
+	// my_printf("mobe return %d\n" ,&pages[PX(0,virtAddr)] );
 	return &pages[PX(0,virtAddr)];
 }
 

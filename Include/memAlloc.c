@@ -4,11 +4,7 @@
 extern unsigned long _end_;
 extern unsigned long FINAL_END[];
 extern unsigned long _text_start[];
-<<<<<<< HEAD
-#define test 0x10000
-=======
 
->>>>>>> temp-branch
 static int nu_of_pages = 0;
 inline unsigned long mem_round_upto_pages(unsigned long memTobeAllign) {
     return (memTobeAllign + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
@@ -19,36 +15,22 @@ void PageTraversal(void *physicalADDRstart , void* physicalADDRend){
     Println();
     char* currenttraversalPointer = (char*)mem_round_upto_pages((unsigned long) physicalADDRstart);
     my_printf("Current traversal pointer \n");
-<<<<<<< HEAD
-    my_printf("%d",(void*)currenttraversalPointer);
-=======
     my_printf("%d\n",(char*)currenttraversalPointer);
->>>>>>> temp-branch
     Println();
 
     char* endofaddr = (char*)physicalADDRend;
     my_printf("I am end of addr \n");
-<<<<<<< HEAD
-    my_printf("%x",(void*)endofaddr);
-=======
     my_printf("%d\n",(char*)endofaddr);
->>>>>>> temp-branch
     Println();
 
     my_printf("I am here");
     Println();
-<<<<<<< HEAD
-    my_printf("%d",PAGE_SIZE);
-    for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
-        freememory(currenttraversalPointer);
-=======
     my_printf("%d\n",PAGE_SIZE);
     for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
         freememory(currenttraversalPointer);
         static int freememcall = 0;
         // my_printf(" currenttraversalPointer insiode for %d\n",(char*)currenttraversalPointer);
         // my_printf("Free memory function call counter %d\n" , freememcall++);
->>>>>>> temp-branch
     }
 
 }
@@ -59,11 +41,7 @@ void freememory (void *mem){
     // mutex_lock(&memLock.lock);
     my_memset(mem,69,PAGE_SIZE);
     freemem = (struct TraverseThroughMemory *)mem;
-<<<<<<< HEAD
-    lib_puts("Freeeing the tables\n");
-=======
     // lib_puts("Freeeing the tables\n");
->>>>>>> temp-branch
     freemem->next = memLock.freemem;
     memLock.freemem = freemem;
     //freemem is poining to the last poiter in mem , and all thhe pages are linked withh linked list
@@ -74,6 +52,7 @@ void freememory (void *mem){
 
 void kernel_mem_init(){
     // Initialise locks for mem handling !!
+    my_printf("kernel mem init");
     mutex_init(&memLock.lock , "memelock");
     // We have to make mem amd specify the page table as till now we have not performed any mem operation!
     // memLock.lock.lock = 1;
@@ -87,12 +66,11 @@ void kernel_mem_init(){
     // my_printf("%d",((void*)_end_));
     // char *x = 0x88000000;
     // my_printf("%d",x);
-<<<<<<< HEAD
-    PageTraversal((void*)_end_, (void*)KERNELEND);
- 
-=======
+    my_printf("before page traversal \n");
+    my_printf("end ......%d\n" , &_end_);
+
     PageTraversal((void*)&_end_, (void*)KERNELEND);
- 
+
 }
 
 void* memory_alloc(){
@@ -109,7 +87,6 @@ void* memory_alloc(){
 
     return (void *)freemem;
 
->>>>>>> temp-branch
 }
 
 void  *my_memset(void *b, int c, int len)
