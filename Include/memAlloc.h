@@ -5,9 +5,10 @@
 #include "../Include/libc/Wprintf.h"
 
 #define BASEADDDRKERNEL 0x80000000UL
-#define KERNELEND 		(BASEADDDRKERNEL + (128*1024*1024)) 
-#define PAGE_SIZE 		 4096
-
+#define KERNELEND 		  (BASEADDDRKERNEL + (128*1024*1024)) 
+#define PAGE_SIZE 		  4096
+//16777216
+//
 void  *my_memset(void *b, int c, int len);
 
 typedef struct TraverseThroughMemory

@@ -139,111 +139,190 @@ so we will use malloc to to take mem of 4096 byte and use that mem to map thhing
 //     unsigned long pa = (level3_table[vpn[0]] & ~0xFFF);  // Extract the physical address
 //     my_printf("VA: 0x%x is mapped to PA: 0x%x\n", virtualAddr, pa);
 // }
+// #define SATP_SV39 (8L << 60)
+// #define PTE_V (1L << 0) // valid
+// #define PTE_R (1L << 1)
+// #define PTE_W (1L << 2)
+// #define PTE_X (1L << 3)
+// #define PTE_U (1L << 4) // user can access
+// #define PA2PTE(pa) ((((unsigned long)pa) >> 12) << 10)
 
-void SetupPaging() {
-    unsigned long readSATP = satp_read();
-    my_printf("Current SATP value: %x\n", readSATP);
 
-    unsigned long* root_page_table = makepagetable();
-    map_page(root_page_table, (unsigned long)UART_TX_ADDR, (unsigned long)UART_TX_ADDR, ((1 << 2) | (1 << 1)));  // Example mapping with RW permissions
+// #define MAKE_SATP(pagetable) (SATP_SV39 | (((unsigned long)pagetable) >> 12))
+// unsigned long* root_page_table ;
+// void SetupPaging() {
+//     unsigned long readSATP = satp_read();
+//     my_printf("Current SATP value: %x\n", readSATP);
 
-    unsigned long satp_value = (((unsigned long)root_page_table >> 12) | (0x8UL << 60));  // Set Sv39 mode and root page table
-    satp_write(satp_value);
-    my_printf("New SATP value : %d\n");
+//     root_page_table = makepagetable();
+//     // map_page(root_page_table, (unsigned long)UART_TX_ADDR, (unsigned long)UART_TX_ADDR, PAGE_SIZE,((1 << 2) | (1 << 1)));  // Example mapping with RW permissions
+//     map_page(root_page_table, 0x10000000, 0x10000000, PAGE_SIZE, PTE_R | PTE_W);
 
-    Println();
-    my_printf("Verifying page table entry:\n");
-    verify_page_table_entry(root_page_table, (unsigned long)UART_TX_ADDR);
+//     asm volatile("sfence.vma zero, zero"); // flush all tlb
+// 	my_printf("root table addr %d\n",root_page_table);
+//     satp_write(MAKE_SATP(root_page_table));
+//     my_printf("New SATP value : %d\n");
+
+//     Println();
+//     my_printf("Verifying page table entry:\n");
+//     asm volatile("sfence.vma zero, zero");
+// 	// verify_page_table_entry(root_page_table, (unsigned long)UART_TX_ADDR);
+
+
+// }
+
+// unsigned long* makepagetable() {
+//     unsigned long* pagetabledatastruct;
+
+//     my_printf("Allocating new page table...\n");
+//     pagetabledatastruct = (unsigned long*)memory_alloc();  // Allocate memory for the page table
+//     my_printf("pagetabledatastruct : %d\n",pagetabledatastruct);
+//     my_memset(pagetabledatastruct, 0, PAGE_SIZE);  // Initialize the page table with zeros
+
+//     my_printf("Page table creation done\n");
+//     return pagetabledatastruct;  // Return pointer to the newly created page table
+// }
+
+// int map_page(unsigned long* pagetabledatastruct, unsigned long virtualAddr, unsigned long size, unsigned long physicalAddr, unsigned long permissionBits) {
+//     unsigned long a, last;
+//     unsigned long VPN[3];
+
+//     // Check if the virtual address and size are aligned with the page size
+//     if ((virtualAddr % PAGE_SIZE) != 0) {
+//     }
+
+//     if ((size % PAGE_SIZE) != 0) {
+//     }
+
+//     if (size == 0) {
+//     }
+
+//     a = virtualAddr;
+//     last = virtualAddr + size - PAGE_SIZE;
+
+//     // Loop through each page in the specified range
+//     for (;;) {
+//         // Break down the virtual address into VPN parts (Sv39 format)
+//         VPN[0] = (a >> 12) & 0x1FF;  // Bits 12-20
+//         VPN[1] = (a >> 21) & 0x1FF;  // Bits 21-29
+//         VPN[2] = (a >> 30) & 0x1FF;  // Bits 30-38
+
+//         // Level 1 page table (VPN[2])
+//         unsigned long* Level1PageTable = &pagetabledatastruct[VPN[2]];
+//         if ((*Level1PageTable & 0x1) == 0) {  // If Level 2 page table is not allocated
+//             *Level1PageTable = (unsigned long)makepagetable() >> 12;
+//             *Level1PageTable |= PTE_V;  // Set valid bit
+//             my_printf("+Allocated Level 2 page table at: %x\n", (*Level1PageTable << 12));
+//         }
+
+//         // Level 2 page table (VPN[1])
+//         unsigned long* Level2PageTable = (unsigned long*)(*Level1PageTable << 12);
+//         if ((Level2PageTable[VPN[1]] & 0x01) == 0) {  // If Level 3 page table is not allocated
+//             Level2PageTable[VPN[1]] = (unsigned long)makepagetable() >> 12;
+//             Level2PageTable[VPN[1]] |= PTE_V;  // Set valid bit
+//             my_printf("Allocated Level 3 page table at: %x\n", Level2PageTable[VPN[1]] << 12);
+//         }
+
+//         // Level 3 page table (VPN[0])
+//         unsigned long* Level3PageTable = (unsigned long*)(Level2PageTable[VPN[1]] << 12);
+        
+//         // Check for existing mapping
+//         if (Level3PageTable[VPN[0]] & PTE_V) {
+//             // panic("map_pages: remap");
+//         }
+
+//         // Map the physical address to the final page table entry
+//         Level3PageTable[VPN[0]] = PA2PTE(physicalAddr) | permissionBits | PTE_V;
+//         my_printf("Mapped VA %x to PA %x with permissions %x\n", a, physicalAddr, permissionBits);
+
+//         // Move to the next page
+//         if (a == last) {
+//             break;  // Exit the loop if we reached the last address
+//         }
+//         a += PAGE_SIZE;
+//         physicalAddr += PAGE_SIZE;
+//     }
+
+//     return 0;  // Success
+// }
+extern char _text_end[];
+#define PXMASK          0x1FF // 9 bits
+#define PXSHIFT(level)  (12+(9*(level)))
+#define PX(level, va) ((((unsigned long) (va)) >> PXSHIFT(level)) & PXMASK)
+
+unsigned long * k_pagetable;
+void maketable(){
+	k_pagetable = setupPagetable();
+	asm volatile("sfence.vma zero, zero");
+	satp_write(((8L << 60) | (((unsigned long)k_pagetable) >> 12)));
+	my_printf("satp : %d\n" , ((8L << 60) | (((unsigned long)k_pagetable) >> 12)));
+	asm volatile("sfence.vma zero, zero");
 }
 
-unsigned long* makepagetable() {
-    unsigned long* pagetabledatastruct;
+unsigned long *setupPagetable(){
 
-    my_printf("Allocating new page table...\n");
-    pagetabledatastruct = (unsigned long*)memory_alloc();  // Allocate memory for the page table
-    my_printf("pagetabledatastruct : %d\n",pagetabledatastruct);
-    my_memset(pagetabledatastruct, 0, PAGE_SIZE);  // Initialize the page table with zeros
+	unsigned long * pagetable;
+	pagetable = (unsigned long*)memory_alloc();
+	my_printf("%d\n" , pagetable);
+	my_memset(pagetable , 0 , PAGE_SIZE);
 
-    my_printf("Page table creation done\n");
-    return pagetabledatastruct;  // Return pointer to the newly created page table
+	map_pages(pagetable,(unsigned long)UART_TX_ADDR,(unsigned long)UART_TX_ADDR,4096,((1<<1)|(1<<2)));
+	map_pages(pagetable, 0x10001000, 0x10001000, 4096, ((1<<1)|(1<<2)));
+	map_pages(pagetable, KERNBASE, KERNBASE, (unsigned long*)_text_end-KERNBASE, ((1<<1)|(1<<3)));
+
+
+	return pagetable;
 }
 
-void map_page(unsigned long* pagetabledatastruct, unsigned long virtualAddr, unsigned long physicAddr, unsigned long permissionBits) {
-    unsigned long VPN[3];
+void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long phyAddr , unsigned long size , int perms){
+	unsigned long start ; // start of virtual address!
+	unsigned long end ;   // end of the virtual addr
 
-    // Break down the virtual address into VPN parts (Sv39 format: 9-9-9 bits for VPN levels)
-    VPN[0] = (virtualAddr >> 12) & 0x1FF;  // Bits 12-20
-    VPN[1] = (virtualAddr >> 21) & 0x1FF;  // Bits 21-29
-    VPN[2] = (virtualAddr >> 30) & 0x1FF;  // Bits 30-38
-
-    my_printf("VPN[2]: %x, VPN[1]: %x, VPN[0]: %d\n", VPN[2], VPN[1], VPN[0]);
-
-    // Level 1 page table (VPN[2])
-    unsigned long* Level1PageTable = &pagetabledatastruct[VPN[2]];
-    if ((*Level1PageTable & 0x1) == 0) {
-        *Level1PageTable = ((unsigned long)makepagetable()) >> 12;
-        *Level1PageTable |= (1 << 0);  // Set valid bit
-        my_printf("Allocated Level 2 page table at: %d\n", (*Level1PageTable << 12));
+	unsigned long *PTE;
+	end = virtAddr + size - PAGE_SIZE;
+	start = virtAddr;
+	my_printf("end : %d\n", end);
+	my_printf("start : %d\n" , start);
+  for(;;){
+    if((PTE = moveThroughPages(pagetable, start, 1)) == 0){
+    	return -1;}
+    if(*PTE & (1<<0))
+      my_printf(" i am panicked : mappages: remap\n");
+    *PTE = ((((((unsigned long)phyAddr) >> 12) << 10)) | perms | (1<<0));
+    if(start == end){
+    	my_printf(" start == end \n");
+      break;
+      
     }
+    my_printf("mapppig. .......%d to %d with perm %d\n ::" , virtAddr , phyAddr,perms);
 
-    // Level 2 page table (VPN[1])
-    unsigned long* Level2PageTable = (unsigned long*)(*Level1PageTable << 12);
-    if ((Level2PageTable[VPN[1]] & 0x01) == 0) {
-        Level2PageTable[VPN[1]] = ((unsigned long)makepagetable()) >> 12;
-        Level2PageTable[VPN[1]] |= (1 << 0);  // Set valid bit
-        my_printf("Allocated Level 3 page table at: %d\n", *Level2PageTable << 12);
-    }
+    start =  start + PAGE_SIZE;
+    phyAddr =phyAddr  + PAGE_SIZE;
 
-    // Level 3 page table (VPN[0])
-    unsigned long* Level3PageTable = (unsigned long*)(Level2PageTable[VPN[0]] << 12);
-    Level3PageTable[VPN[0]] = (physicAddr >> 12) | permissionBits | (1 << 0);  // Map VA to PA with flags
-
-    my_printf("Mapped VA %x to PA %x with permissions %x\n", virtualAddr, physicAddr, permissionBits);
+  }
 }
 
-void verify_page_table_entry(unsigned long* root_page_table, unsigned long virtualAddr) {
-    unsigned long VPN[3];
-    VPN[0] = (virtualAddr >> 12) & 0x1FF;   // Extract VPN[0]
-    VPN[1] = (virtualAddr >> 21) & 0x1FF;   // Extract VPN[1]
-    VPN[2] = (virtualAddr >> 30) & 0x1FF;   // Extract VPN[2]
 
-    my_printf("Verifying VA: 0x%x -> VPN[2]: 0x%x, VPN[1]: 0x%x, VPN[0]: 0x%x\n", virtualAddr, VPN[2], VPN[1], VPN[0]);
-    // Level 1 Page Table
-    unsigned long* level1_table = &root_page_table[VPN[2]];
-    if (((unsigned long)*level1_table & 0x1) == 0) {
-    my_printf("Level 1 PTE not valid\n");
+unsigned long* moveThroughPages(unsigned long * pages , unsigned long virtAddr , int check){
+	for(int i = 2 ; i > 0 ; i--){
+		unsigned long* pte = &pages[PX(i,virtAddr)];
+		if(*pte  & (1<<0)){
+			pages = (unsigned long *)(((*pte) >> 10) << 12);
+		}
+		else {
+      if(!check || (pages = (unsigned long*)memory_alloc()) == 0)
+        return 0;
+      my_memset(pages, 0, PAGE_SIZE);
+      *pte = (((((unsigned long)pages) >> 12) << 10)) | (1<<0);
     }
- 	if (((unsigned long)*level1_table & 0x1) == 1) {
-    my_printf("Level 1 PTE found\n");
-    }
-    // Level 2 Page Table
-    unsigned long* level2_table = &root_page_table[VPN[1]];
-    if (((unsigned long)*level2_table & 0x1) == 0) {
-    my_printf("Level 2 PTE not valid\n");
-    }
- 	if (((unsigned long)*level2_table & 0x1) == 1) {
-    my_printf("Level 2 PTE found\n");
-    }
-    // Level 1 Page Table
-    unsigned long* level3_table = &root_page_table[VPN[0]];
-    if (((unsigned long)*level3_table & 0x1) == 0) {
-    my_printf("Level 3 PTE not valid\n");
-    }
- 	if (((unsigned long)*level3_table & 0x1) == 1) {
-    my_printf("Level 3 PTE found\n");
-    }
-    unsigned long pa = ((level3_table[VPN[0]] & ~0xFFF) << 12); 
-    my_printf("physicall raw value  : %d\n" , level3_table) ;
-   //0x88000000
-   //0x10000000 --> vma
-   //0x87000000 --> pma 
-   //0x87000000
-
-
-
-    // if( (0x88000000 - 0x10000000) == -pa){
-    	my_printf("physical addr is mapped to same of virtual addr \n");
-    	my_printf("VA: 0x%x\n", virtualAddr);
-    	my_printf("PHY ADDR: 0x%x\n" ,pa);
-    // }
+	}
+	my_printf("mobe return %d\n" ,&pages[PX(0,virtAddr)] );
+	return &pages[PX(0,virtAddr)];
 }
+
+
+
+
+
+
+

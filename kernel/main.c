@@ -24,7 +24,10 @@ int main()
 
     lib_puts("startted\n");
 
-    SetupPaging();
+    maketable();
+
+
+    
 
     poweroff();
     // reboot();

@@ -7,3 +7,7 @@ void lib_puts(const char *s);
 void UART_SEND(const char *str);
 
 #endif
+//00010000
+//00000000
+//00000000
+//00000000

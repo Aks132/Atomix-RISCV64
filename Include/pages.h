@@ -4,6 +4,8 @@
 #include "../Include/memAlloc.h"
 #include "../Include/uart/uart.h"
 #include "../Include/core/core.h"
-void map_page(unsigned long* pagetabledatastruct , unsigned long virtualAddr , unsigned long physicAddr , unsigned long permissionBits);
-unsigned long* makepagetable();
-void SetupPaging();
+#include "../Include/systemaddr.h"
+void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long phyAddr , unsigned long size , int perms);
+// unsigned long* makepagetable();
+unsigned long *setupPagetable();
+unsigned long* moveThroughPages(unsigned long * pages , unsigned long virtAddr , int check);
