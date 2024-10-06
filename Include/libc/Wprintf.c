@@ -175,7 +175,7 @@ void my_printf(const char *format, ...) {
             switch (*format) {
                 case 'c': { // Character
                     char ch = (char)va_arg(args, int);
-                    PrintChar(ch);
+                    lib_putc(ch); // Use lib_putc
                     break;
                 }
                 case 'd': { // Decimal
@@ -190,24 +190,24 @@ void my_printf(const char *format, ...) {
                 }
                 case 's': { // String
                     const char *str = va_arg(args, const char *);
-                    UART_SEND(str);
+                    UART_SEND(str); // Keep UART_SEND for sending strings
                     break;
                 }
                 case 'p': { // Pointer
                     void* ptr = va_arg(args, void*);
-                    PrintChar('0'); // Print '0' for the start of the hex
-                    PrintChar('x'); // Print 'x' to indicate hex
+                    lib_putc('0'); // Print '0' for the start of the hex
+                    lib_putc('x'); // Print 'x' to indicate hex
                     PrintHex((unsigned long)ptr); // Print the pointer in hex
                     break;
                 }
-                default: // Unknown format specifier, ignore it
-                    PrintChar('%'); // Print the '%' sign
-                    PrintChar(*format); // Print the format specifier
+                default: // Unknown format specifier
+                    lib_putc('%'); // Print the '%' sign
+                    lib_putc(*format); // Print the format specifier
                     break;
             }
         } else {
             // Print regular characters
-            PrintChar(*format);
+            lib_putc(*format); // Use lib_putc to print characters
         }
         format++;
     }
