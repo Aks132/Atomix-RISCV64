@@ -17,62 +17,26 @@ hartid3:    .word 0    # Memory space for HART ID 3
 
 .globl _entry
 
-
-
 _entry:
     # Get hart ID into t0 (current core ID)
     csrr t0, mhartid   
 
-    li t1, 0           # Check if hart is 1
-    beq t0, t1, init_hart0  
+    # Store the hart ID into the appropriate memory space
+    la t1, hartid0            # Base address for hartid storage
+    li a0, 4                  # Word size (each hartid is 4 bytes apart)
+    mul a0, t0, a0            # Calculate the correct offset for this hart
+    add t1, t1, a0            # Compute the hartidX address
+    sw t0, 0(t1)              # Store hart ID at calculated address
 
-    li t1, 1           # Check if hart is 1
-    beq t0, t1, init_hart1  
+    # Set up the stack for the hart
+    la sp, stack0             # Load base address of stack0 (defined in start.c)
+    li a0, 1024*4             # Stack size per hart (4KB)
+    csrr a1, mhartid          # Get hart ID again into a1
+    mul a0, a0, a1            # Calculate offset: hartid * 4KB
+    add sp, sp, a0            # Set up stack pointer for this hart
 
-    li t1, 2           # Check if hart is 2
-    beq t0, t1, init_hart2  
+    # Jump to start function in C
+    call start
 
-    li t1, 3           # Check if hart is 3
-    beq t0, t1, init_hart3  
-
-    # If none of the above, jump to main (default behavior)
-    call main
-
-# Core-specific initialization, setting up their own stack
-
-init_hart0:
-    la sp, _stack_end          # Load _stack_end from linker
-    li t1, 4096                # Stack size for Core 1 (subtract 8192 for Hart 1 stack)
-    sub sp, sp, t1             # Adjust the stack pointer for Core 1
-    la t1, hartid1             # Store hart ID in data memory (for Core 1)
-    sw t0, 0(t1)
-    j Core0_Init            # Call core-specific initialization function
-   
-
-init_hart1:
-    la sp, _stack_end          # Load _stack_end from linker
-    li t1, 8192                # Stack size for Core 1 (subtract 8192 for Hart 1 stack)
-    sub sp, sp, t1             # Adjust the stack pointer for Core 1
-    la t1, hartid1             # Store hart ID in data memory (for Core 1)
-    sw t0, 0(t1)
-    j Core1_Init            # Call core-specific initialization function
-   
-
-init_hart2:
-    la sp, _stack_end          # Load _stack_end from linker
-    li t1, 12288               # Stack size for Core 2 (subtract 12288 for Hart 2 stack)
-    sub sp, sp, t1             # Adjust the stack pointer for Core 2
-    la t1, hartid2             # Store hart ID in data memory (for Core 2)
-    sw t0, 0(t1)
-    call Core2_Init            # Call core-specific initialization function
-   
-
-init_hart3:
-    la sp, _stack_end          # Load _stack_end from linker
-    li t1, 16384               # Stack size for Core 3 (subtract 16384 for Hart 3 stack)
-    sub sp, sp, t1             # Adjust the stack pointer for Core 3
-    la t1, hartid3             # Store hart ID in data memory (for Core 3)
-    sw t0, 0(t1)
-    call Core3_Init            # Call core-specific initialization function
-   
-
+spin:
+    j spin                    # Infinite loop after start to prevent further execution

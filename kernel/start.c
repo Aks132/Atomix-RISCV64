@@ -1,78 +1,27 @@
 #include "start.h"
 #include "../Include/mutex/mutex.h"
 #include "../Include/core/core.h"
+
+#define NCPU 4
 const char * core0 = "I am core 0! \n";
 const char * core1 = "I am core 1! \n";
 const char * core2 = "I am core 2! \n";
 const char * core3 = "I am core 3! \n";
 
-mutex_t my_mutex;
 unsigned long id ;
 unsigned long var;
 unsigned long getMPP;
 unsigned long sieregister;
 
+void timerinit();
 
-void Start(){
-    id = mhartid();
-    if(id == 0)
-    {
-    for(long i = 0; i > 100000000 ; i++);
-    my_printf("I am 0 hart id starting main funt! \n");
-    // for(long i = 0 ; i < 500000000 ; i++);
-    // my_printf("I am core 0 of main \n");
-    // my_printf("From here we will only use signle core ");
-    for(int i = 0; i > 100000000 ; i++);
-        //after this none should print expects core 0 
-    my_printf("I am only core 0 !!");
+// boot.S needs one stack per CPU.
 
-   my_printf("\n");my_printf("\n");my_printf("\n");my_printf("\n");my_printf("\n");
-
-   /*
-
-    Check for misa register :) 
-
-   */
+__attribute__ ((aligned (16))) char stack0[4096 * NCPU];
 
 
-    unsigned long misa = misa_read();
-    unsigned long base_isa = misa & 0x3; 
-
-    switch(base_isa) {
-        case 0: my_printf("Base ISA: RV32\n"); break;
-        case 1: my_printf("Base ISA: RV64\n"); break;
-        case 2: my_printf("Base ISA: RV128\n"); break;
-        default: my_printf("Unknown base ISA\n"); break;
-    }// finally some use of switch case LOL
+void start(){
     
-
-    my_printf("Supported Extensions:\n");
-
-    if (misa & (1UL << ('I' - 'A'))) my_printf("  Extension: 'I' (Integer)\n");
-    if (misa & (1UL << ('M' - 'A'))) my_printf("  Extension: 'M' (Multiply/Divide)\n");
-    if (misa & (1UL << ('A' - 'A'))) my_printf("  Extension: 'A' (Atomic)\n");
-    if (misa & (1UL << ('F' - 'A'))) my_printf("  Extension: 'F' (Single-Precision Floating Point)\n");
-    if (misa & (1UL << ('D' - 'A'))) my_printf("  Extension: 'D' (Double-Precision Floating Point)\n");
-    if (misa & (1UL << ('C' - 'A'))) my_printf("  Extension: 'C' (Compressed Instructions)\n");
-    if (misa & (1UL << ('S' - 'A'))) my_printf("  Extension: 'S' (Supervisor Mode)\n");
-    if (misa & (1UL << ('U' - 'A'))) my_printf("  Extension: 'U' (User Mode)\n");
-    if (misa & (1UL << ('Q' - 'A'))) my_printf("  Extension: 'Q' (Quad-Precision Floating Point)\n");
-    if (misa & (1UL << ('V' - 'A'))) my_printf("  Extension: 'V' (Vector Operations)\n");
-    if (misa & (1UL << ('B' - 'A'))) my_printf("  Extension: 'B' (Bit Manipulation)\n");
-    if (misa & (1UL << ('P' - 'A'))) my_printf("  Extension: 'P' (Packed-SIMD)\n");
-    if (misa & (1UL << ('H' - 'A'))) my_printf("  Extension: 'H' (Hypervisor)\n");
-    if (misa & (1UL << ('E' - 'A'))) my_printf("  Extension: 'E' (Embedded Base Integer ISA)\n");
-    if (misa & (1UL << ('J' - 'A'))) my_printf("  Extension: 'J' (Dynamic Translations)\n");
-    if (misa & (1UL << ('T' - 'A'))) my_printf("  Extension: 'T' (Transaction Memory)\n");
-    if (misa & (1UL << ('L' - 'A'))) my_printf("  Extension: 'L' (Decimal Floating Point)\n");
-    if (misa & (1UL << ('N' - 'A'))) my_printf("  Extension: 'N' (User-level interrupts)\n");
-    if (misa & (1UL << ('X' - 'A'))) my_printf("  Extension: 'X' (Non-standard extensions)\n");
-    if (misa & (1UL << ('Z' - 'A'))) my_printf("  Extension: 'Z' (Standard extensions)\n");
-
-        /*
-    For now we are operating in machine mode , now we can switch this into supervisor mode!
-
-   */
 
     var = mstatus_read();
     // MPP -> hold the previous priviliged mode bits :
@@ -81,12 +30,6 @@ void Start(){
     // PrintDigit(var);
     // getMPP = get_mpp();
     // PrintDigit(getMPP);
-    Println();Println();Println();
-
-
-
-
-
 
     // SET THE PREVIOUS STATE TO SUPERVISOR MODE , PUTTING FN OF MAIN INSIDE mepc SO WHEN WE RETURN 
     var &= ~(3UL << 11); // 11 -> machine mode
@@ -94,7 +37,6 @@ void Start(){
     mstatus_write(var);
     set_mepc((unsigned long)main());
 
-    Println();Println();Println();
     // mret return from machine mode and enteres in the previous mode and start executing in the supervisor mode 
     // so the main will run inside supervisor mode!!
 
@@ -114,55 +56,32 @@ void Start(){
     //https://www.reddit.com/r/RISCV/comments/otna8o/getting_into_supervisor_mode_with_paging_disabled/
     pmpaddr0_write(0x3fffffffffffffull);
     pmpcfg0_write(0xf);
+    
+    // ask for clock interrupts.
+    timerinit();
+
+    
+    // keep each CPU's hartid in its tp register, for cpuid().
+    id = mhartid();
+    tp_write(id);
+
     mret();
 
-
 }
 
-}
-
-void Core0_Init(){
-    mutex_lock(&my_mutex);
-    Println();
-    Println();
-    my_printf("%s",core0);
-    Println();
-    Println();
-    mutex_unlock(&my_mutex);
-    Start();
-}
-
-void Core1_Init(){
-    mutex_lock(&my_mutex);
-
-    Println();
-    Println();
-    my_printf("%s",core1);
-    Println();
-    Println();
-    mutex_unlock(&my_mutex);
-    // main();
-}
-
-void Core2_Init(){
-    mutex_lock(&my_mutex);
-    Println();
-    Println();
-   my_printf("%s",core2);
-    Println();
-    Println();
-    mutex_unlock(&my_mutex);
-    // main();
-}
-
-void Core3_Init(){
-    mutex_lock(&my_mutex);
-
-    Println();
-    Println();
-   my_printf("%s",core3);
-    Println();
-    Println();
-    mutex_unlock(&my_mutex);
-    // main();
+// ask each hart to generate timer interrupts.
+void
+timerinit()
+{
+  // enable supervisor-mode timer interrupts.
+  mie_write(mie_read() | (1L << 5));
+  
+  // enable the sstc extension (i.e. stimecmp).
+  menvcfg_write(menvcfg_read() | (1L << 63)); 
+  
+  // allow supervisor to use stimecmp and time.
+  mcounteren_write(mcounteren_read() | 2);
+  
+  // ask for the very first timer interrupt.
+  stimecmp_write(time_read() + 1000000);
 }
