@@ -163,10 +163,10 @@ uint64_t tp_read()
   return x;
 }
 
-void tp_write(uint64_t x)
-{
-  asm volatile("mv tp, %0" : : "r" (x));
+void tp_write(unsigned long hartid) {
+    asm volatile("mv tp, %0" :: "r"(hartid));
 }
+
 void EnableInterrupt(){
   sstatus_write(sstatus_read() | (1UL << 1));
   //my_printf("Enabled Interupt\n");

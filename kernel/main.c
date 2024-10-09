@@ -1,10 +1,10 @@
 #include "header.h"
 
 volatile static int started = 0;
-mutex_t my_mutex;
+mutex_t main_mutex;
 
 void system_init(void) {
-    mutex_init(&my_mutex, "init mutex");
+    mutex_init(&main_mutex, "init mutex");
     uart_init();  // Initialize UART and its mutex
     misa_print();
 
@@ -69,35 +69,22 @@ cpuid()
 
 void main()
 {   
-system_init();
+//system_init();
+//misa_print();
+    // Print the current system time
+    uint64_t current_time = read_mtime();
+    my_printf("Current time: %llu us\n", current_time);
 
-       
-if (cpuid() == 0){
-    my_printf("cpuid %d starting\n", cpuid());
-    
-    mutex_lock(&my_mutex);
-    for(int i=0;i<100;i++){
-        my_printf("The number is %d \n",i);
-    }
-    mutex_unlock(&my_mutex);
-    
-    kernel_mem_init();
-    lib_puts("For now mem alloc is on break\n");
+    // Use the non-blocking delay function for a 2-second delay
+    non_blocking_delay(2000000);  // Delay for 2,000,000 microseconds (2 seconds)
 
-    my_printf("I am printF \n");
+    // After delay, print the system time again
+    current_time = read_mtime();
+    my_printf("Time after delay: %llu us\n", current_time);
 
-    lib_puts("startted\n");
+if(mhartid() == 2){
+my_printf("hart %d starting\n", mhartid());
+poweroff();
+}
 
-    maketable();
-
-    poweroff();
-    // reboot();
-    started = 1;
-    }
-    else{
-       while(started == 0);
-    __sync_synchronize();
-    my_printf("hart %d starting\n", cpuid());
-
-    }
 }

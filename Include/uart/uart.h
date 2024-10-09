@@ -15,6 +15,7 @@ void uart_init(void);
 void lib_putc(char ch);
 void lib_puts(const char *s);
 void UART_SEND(const char *str);
+void UART_DEBUG(const char *str);
 
 // Inline function to read UART register
 static inline volatile unsigned char *UART_REG(unsigned long offset) {

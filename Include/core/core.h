@@ -51,7 +51,7 @@ void stimecmp_write(uint64_t x);
 uint64_t time_read(void);
 
 uint64_t tp_read(void);   //thread pointer 
-void tp_write(uint64_t x);
+void tp_write(unsigned long hartid);
 
 void EnableInterrupt(void);
 void DisableInterrupt(void);

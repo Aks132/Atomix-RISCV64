@@ -13,14 +13,11 @@ unsigned long var;
 unsigned long getMPP;
 unsigned long sieregister;
 
-void timerinit();
+mutex_t my_mutex;
 
 // boot.S needs one stack per CPU.
 
-__attribute__ ((aligned (16))) char stack0[4096 * NCPU];
-
-
-void start(){
+void Start(){
     
 
     var = mstatus_read();
@@ -58,22 +55,7 @@ void start(){
     pmpcfg0_write(0xf);
     
     // ask for clock interrupts.
-    timerinit();
-
-    
-    // keep each CPU's hartid in its tp register, for cpuid().
-    id = mhartid();
-    tp_write(id);
-
-    mret();
-
-}
-
-// ask each hart to generate timer interrupts.
-void
-timerinit()
-{
-  // enable supervisor-mode timer interrupts.
+      // enable supervisor-mode timer interrupts.
   mie_write(mie_read() | (1L << 5));
   
   // enable the sstc extension (i.e. stimecmp).
@@ -84,4 +66,60 @@ timerinit()
   
   // ask for the very first timer interrupt.
   stimecmp_write(time_read() + 1000000);
+    
+  // keep each CPU's hartid in its tp register, for cpuid().
+  //id = mhartid();
+
+  mret();
+
+}
+void Core0_Init(){
+
+    // mutex_lock(&my_mutex);
+    // Println();
+    // Println();
+    // my_printf("%s",core0);
+    // Println();
+    // Println();
+    // mutex_unlock(&my_mutex);
+     Start();
+}
+
+void Core1_Init(){
+    // mutex_init(&my_mutex,"core"); 
+
+    // mutex_lock(&my_mutex);
+    // Println();
+    // Println();
+    // my_printf("%s",core1);
+    // Println();
+    // Println();
+    // mutex_unlock(&my_mutex);
+    // // main();
+    Start();
+
+}
+
+void Core2_Init(){
+  //   mutex_lock(&my_mutex);
+  //   Println();
+  //   Println();
+  //  my_printf("%s",core2);
+  //   Println();
+  //   Println();
+  //   mutex_unlock(&my_mutex);
+    // main();
+    Start();
+}
+
+void Core3_Init(){
+  //   mutex_lock(&my_mutex);
+  //   Println();
+  //   Println();
+  //  my_printf("%s",core3);
+  //   Println();
+  //   Println();
+    //mutex_unlock(&my_mutex);
+    // main();
+    Start();
 }
