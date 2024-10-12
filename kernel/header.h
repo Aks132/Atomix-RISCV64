@@ -8,3 +8,5 @@
 #include "../include/syscon/syscon.h"
 #include "../Include/memAlloc.h"
 #include "../Include/pages.h"
+#include "../Include//PCIE.h"
+#include "../Include/VGA.h"

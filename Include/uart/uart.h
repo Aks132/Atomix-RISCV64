@@ -2,7 +2,8 @@
 #define UART_H
 #include "../Include/mutex/mutex.h"
 
-#define      UART_TX_ADDR      0x10000000UL
+// #define      UART_TX_ADDR      0x10000000UL
+ #define      UART_TX_ADDR       0x30000000
 int lib_putc(char ch);
 void lib_puts(const char *s);
 void UART_SEND(const char *str);

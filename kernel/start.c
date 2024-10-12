@@ -1,6 +1,8 @@
 #include "start.h"
 #include "../Include/mutex/mutex.h"
 #include "../Include/core/core.h"
+
+
 const char * core0 = "I am core 0! \n";
 const char * core1 = "I am core 1! \n";
 const char * core2 = "I am core 2! \n";
@@ -117,6 +119,7 @@ void Start(){
     //https://www.reddit.com/r/RISCV/comments/otna8o/getting_into_supervisor_mode_with_paging_disabled/
     pmpaddr0_write(0x3fffffffffffffull);
     pmpcfg0_write(0xf);
+
     mret();
 
 

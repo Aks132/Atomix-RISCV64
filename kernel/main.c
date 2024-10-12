@@ -1,5 +1,7 @@
 #include "header.h"
 
+    volatile unsigned char* io_base = (volatile unsigned char*) 0x40000000; // Replace 0xADDRESS with actual I/O base address
+#define FB_BASE 0x50000000  // Framebuffer base address
 
 int main()
 {
@@ -29,11 +31,16 @@ int main()
     lib_puts("startted\n");
 
     maketable();
+    
+    enumerate_pci_devices();
+    set_mode13();
 
-
+        
+ 
+    return 0;
     
 
-    poweroff();
+    // poweroff();
     // reboot();
 
 }
