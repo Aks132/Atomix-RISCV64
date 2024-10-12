@@ -6,3 +6,13 @@
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 
+void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR);
+void makeWhite();
+void makeBlack();
+void H();
+void E();
+void L1();
+void L2();
+void O();
+void Exclamation1();
+void Exclamation2();

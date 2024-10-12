@@ -3,11 +3,6 @@
 #include "../Include/core/core.h"
 
 
-const char * core0 = "I am core 0! \n";
-const char * core1 = "I am core 1! \n";
-const char * core2 = "I am core 2! \n";
-const char * core3 = "I am core 3! \n";
-
 mutex_t my_mutex;
 unsigned long id ;
 unsigned long var;
@@ -22,14 +17,14 @@ void Start(){
 
     if(id == 0)
     {
-    for(long i = 0; i > 100000000 ; i++);
-    my_printf("I am 0 hart id starting main funt! \n");
+
+    my_printf("I am 0 hart id starting \n");
     // for(long i = 0 ; i < 500000000 ; i++);
     // my_printf("I am core 0 of main \n");
     // my_printf("From here we will only use signle core ");
     for(int i = 0; i > 100000000 ; i++);
         //after this none should print expects core 0 
-    my_printf("I am only core 0 !!");
+    // my_printf("I am only core 0 !!");
 
    my_printf("\n");my_printf("\n");my_printf("\n");my_printf("\n");my_printf("\n");
 
@@ -38,8 +33,6 @@ void Start(){
     Check for misa register :) 
 
    */
-
-
     unsigned long misa = misa_read();
     unsigned long base_isa = misa & 0x3; 
 
@@ -131,7 +124,7 @@ void Core0_Init(){
     // mutex_lock(&my_mutex);
     // Println();
     // Println();
-    // my_printf("%s",core0);
+    my_printf("0\n");
     // Println();
     // Println();
     // mutex_unlock(&my_mutex);
@@ -143,7 +136,7 @@ void Core1_Init(){
 
     // Println();
     // Println();
-    // my_printf("%s",core1);
+    my_printf("1\n");
     // Println();
     // Println();
     // mutex_unlock(&my_mutex);
@@ -153,9 +146,9 @@ void Core1_Init(){
 void Core2_Init(){
 //     mutex_lock(&my_mutex);
 //     Println();
-//     Println();
-//    my_printf("%s",core2);
-//     Println();
+    // Println();
+    my_printf("2\n");
+    // Println();
 //     Println();
 //     mutex_unlock(&my_mutex);
   //  Start();
@@ -165,9 +158,9 @@ void Core3_Init(){
     // mutex_lock(&my_mutex);
 
 //     Println();
-//     Println();
-//    my_printf("%s",core3);
-//     Println();
+    // Println();
+    my_printf("3\n");
+    // Println();
 //     Println();
 //     mutex_unlock(&my_mutex);
   // Start();

@@ -38,8 +38,8 @@ void enumerate_pci_devices() {
         for (int i = 0; pci_registry[i].vendor_id != 0xFFFF; i++) {
             if (pci_registry[i].vendor_id == vendor_id && pci_registry[i].device_id == device_id) {
                     if (pci_registry[i].setup_function) {
-                    my_printf("%d number of calls \n",++count);
-                    my_printf("Calling setup function for vendor ID %x, device ID %x\n", vendor_id, device_id);
+                    // my_printf("%d number of calls \n",++count);
+                    // my_printf("Calling setup function for vendor ID %x, device ID %x\n", vendor_id, device_id);
                     pci_registry[i].setup_function();
                 }
             }
@@ -49,7 +49,7 @@ void enumerate_pci_devices() {
 }
 
 void setup_qemu_pci_bridge(){
-    my_printf("wqemu bridge \n");
+    my_printf("qemu bridge setup done!! \n");
 }
 
 void write_volatile(uint32_t *addr, uint32_t value) {
@@ -61,18 +61,18 @@ uint32_t read_volatile(uint32_t *addr) {
 }
 
 void setup_pci_vga() {
-    my_printf("I am PCI VGA getting called\n");
+    my_printf("Setting PCIE VGA\n");
     
     uint32_t *dev_base = (uint32_t*)0x30008000;
     uint32_t *fb_base = (uint32_t*)0x50000000;
     write_volatile(dev_base + 4, 0xFFFFFFFF);  // dev_base + 4 bytes = dev_base + 1 (32-bit pointers)
     uint32_t fb_size = (~read_volatile(dev_base + 4) | 0xF) + 1;  // dev_base + 1 for 4-byte offset
-    my_printf("FB size: %d\n", fb_size);
+    // my_printf("FB size: %d\n", fb_size);
     uint32_t *io_base = fb_base + (fb_size / sizeof(uint32_t));  // Divide by sizeof(uint32_t) for correct offset
-    my_printf("IO base val: %p\n", io_base);
+    // my_printf("IO base val: %p\n", io_base);
     write_volatile(dev_base + 6, 0xFFFFFFFF);  // dev_base + 6 bytes = dev_base + 3 (32-bit pointers)
     uint32_t io_size = (~read_volatile(dev_base + 6) | 0xF) + 1;  // dev_base + 3 for 6-byte offset
-    my_printf("FB base: %p\n", fb_base);
+    // my_printf("FB base: %p\n", fb_base);
     write_volatile(dev_base + 4, (uint32_t)fb_base | 0x8);  // dev_base + 4 bytes = dev_base + 1
     write_volatile(dev_base + 6, (uint32_t)io_base | 0x8);  // dev_base + 6 bytes = dev_base + 3
     uint32_t *cmd = dev_base;

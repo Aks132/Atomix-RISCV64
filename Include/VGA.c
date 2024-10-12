@@ -1,10 +1,10 @@
 #include "../Include/VGA.h"
+
 void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR)
 {
     unsigned char* location = (unsigned char*)0x50000000 + 320 * pos_y + pos_x;
     *location = VGA_COLOR;
 }
-
 void makeWhite(){
             for(int i  = 0 ; i < 320 ; i++){
         for(int j = 0 ; j < 200 ; j++){
@@ -12,6 +12,87 @@ void makeWhite(){
         }
     }
 }
+void makeBlack(){
+    for(int i  = 0 ; i < 320 ; i++){
+        for(int j = 0 ; j < 200 ; j++){
+        putpixel(i,j,0x0);
+        }
+    }
+}
+void H() {
+    for (int i = 20; i < 41; i++) {
+        putpixel(20, i, 0xF); 
+    }
+    for (int i = 20; i < 41; i++) {
+        putpixel(30, i, 0xF); 
+    }
+    for (int i = 20; i < 31; i++) {
+        putpixel(i, 30, 0xF); 
+    }
+}
+void E() {
+    for (int i = 20; i < 41; i++) {
+        putpixel(50, i, 0xF); 
+    }
+    for (int i = 50; i < 61; i++) {
+        putpixel(i, 20, 0xF); 
+    }
+    for (int i = 50; i < 61; i++) {
+        putpixel(i, 30, 0xF); 
+    }
+    for (int i = 50; i < 61; i++) {
+        putpixel(i, 40, 0xF); 
+    }
+}
+void L1() {
+    for (int i = 20; i < 41; i++) {
+        putpixel(90, i, 0xF); 
+    }
+    for (int i = 90; i < 101; i++) {
+        putpixel(i, 40, 0xF); 
+    }
+}
+void L2() {
+    for (int i = 20; i < 41; i++) {
+        putpixel(120, i, 0xF);
+    }
+    for (int i = 120; i < 131; i++) {
+        putpixel(i, 40, 0xF); 
+    }
+}
+
+void O() {
+    for (int i = 20; i < 41; i++) {
+        putpixel(150, i, 0xF); 
+    }
+    for (int i = 20; i < 41; i++) {
+        putpixel(170, i, 0xF); 
+    }
+    for (int i = 150; i < 171; i++) {
+        putpixel(i, 20, 0xF); 
+    }
+    for (int i = 150; i < 171; i++) {
+        putpixel(i, 40, 0xF); 
+    }
+}
+void Exclamation1() {
+    
+    for (int i = 20; i < 40; i++) {
+        putpixel(190, i, 0xF); 
+    }
+    putpixel(190, 42, 0xF);
+    putpixel(190, 43, 0xF);
+}
+
+void Exclamation2() {
+ 
+    for (int i = 20; i < 40; i++) {
+        putpixel(200, i, 0xF); 
+    }
+    putpixel(200, 42, 0xF);
+    putpixel(200, 43, 0xF);
+}
+
 
 uint32_t PALETTE[PALETTE_SIZE] = {
   0x000000, 0x0000AA, 0x00AA00, 0x00AAAA, 0xAA0000, 0xAA00AA, 0xAA5500, 0xAAAAAA, 0x555555,
@@ -86,7 +167,7 @@ void set_mode13() {
             *(Addr0300 + 0xDA) = 0;
             *port = index;
             *port = data;
-            my_printf(" post %x\n", *port);
+            // my_printf(" post %x\n", *port);
         } else if (vport == 0xC2) {
             *port = data;
         } else {
@@ -109,4 +190,17 @@ void set_mode13() {
         // my_printf("b : %x\n" , *p);
     }
     makeWhite();
+    for(int i = 0; i < 50000000;i++);
+    makeBlack();
+    makeWhite();
+    for(int i = 0; i < 50000000;i++);
+    makeBlack();
+
+    H();
+    E();
+    L1();
+    L2();
+    O();
+    Exclamation1();
+    Exclamation2();
 }

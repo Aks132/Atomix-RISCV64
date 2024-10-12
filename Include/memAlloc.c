@@ -14,18 +14,18 @@ void PageTraversal(void *physicalADDRstart , void* physicalADDRend){
 
     Println();
     char* currenttraversalPointer = (char*)mem_round_upto_pages((unsigned long) physicalADDRstart);
-    my_printf("Current traversal pointer \n");
-    my_printf("%d\n",(char*)currenttraversalPointer);
+    // my_printf("Current traversal pointer \n");
+    // my_printf("%d\n",(char*)currenttraversalPointer);
     Println();
 
     char* endofaddr = (char*)physicalADDRend;
-    my_printf("I am end of addr \n");
-    my_printf("%d\n",(char*)endofaddr);
-    Println();
+    // my_printf("I am end of addr \n");
+    // my_printf("%d\n",(char*)endofaddr);
+    // Println();
 
-    my_printf("I am here");
-    Println();
-    my_printf("%d\n",PAGE_SIZE);
+    // my_printf("I am here");
+    // Println();
+    // my_printf("%d\n",PAGE_SIZE);
     for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
         freememory(currenttraversalPointer);
         static int freememcall = 0;
@@ -52,7 +52,7 @@ void freememory (void *mem){
 
 void kernel_mem_init(){
     // Initialise locks for mem handling !!
-    my_printf("kernel mem init");
+    my_printf("kernel mem init done\n");
     mutex_init(&memLock.lock , "memelock");
     // We have to make mem amd specify the page table as till now we have not performed any mem operation!
     // memLock.lock.lock = 1;
@@ -66,8 +66,8 @@ void kernel_mem_init(){
     // my_printf("%d",((void*)_end_));
     // char *x = 0x88000000;
     // my_printf("%d",x);
-    my_printf("before page traversal \n");
-    my_printf("end ......%d\n" , &_end_);
+    // my_printf("before page traversal \n");
+    // my_printf("end ......%d\n" , &_end_);
 
     PageTraversal((void*)&_end_, (void*)KERNELEND);
 

@@ -24,6 +24,85 @@ That meas our page table should be of some data type (for now unsigned long *)
 so we will use malloc to to take mem of 4096 byte and use that mem to map thhings
 
 */ 
+extern char _text_end[];
+extern char * linker_textAddr = _text_end;
+#define MASKNINEBIT          0x1FF // 9 bits
+#define PHYSICALSHIFT(level)  (12+(9*(level)))
+#define PX(level, va) ((((unsigned long) (va)) >> PHYSICALSHIFT(level)) & MASKNINEBIT)
+
+unsigned long * k_pagetable;
+void maketable(){
+	k_pagetable = setupPagetable();
+	asm volatile("sfence.vma zero, zero");
+	satp_write(((8L << 60) | (((unsigned long)k_pagetable) >> 12)));
+	// my_printf("satp : %d\n" , ((8L << 60) | (((unsigned long)k_pagetable) >> 12)));
+	asm volatile("sfence.vma zero, zero");
+}
+
+unsigned long *setupPagetable(){
+
+	unsigned long * pagetable;
+	pagetable = (unsigned long*)memory_alloc();
+	// my_printf("%d\n" , pagetable);
+	my_memset(pagetable , 0 , PAGE_SIZE);
+
+	map_pages(pagetable,(unsigned long)UART_TX_ADDR,(unsigned long)UART_TX_ADDR,4096,((1<<1)|(1<<2)));
+	// map_pages(pagetable, 0x10001000, 0x10001000, 4096, ((1g<<1)|(1<<2)));
+	// my_printf("text - kernal %d\n" ,_text_end-KERNBASE );
+	map_pages(pagetable, KERNBASE, KERNBASE, mem_round_upto_pages((unsigned long)_text_end-KERNBASE), ((1<<1)|(1<<3)));
+
+
+	return pagetable;
+}
+
+void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long phyAddr , unsigned long size , int perms){
+	unsigned long start = 0 ; // start of virtual address!
+	unsigned long end ;   // end of the virtual addr
+
+	unsigned long *PTE;
+	end = virtAddr + size - PAGE_SIZE;
+	start =( unsigned long )virtAddr;
+	// my_printf("end : %d\n", end);
+	// my_printf("start : %d\n" , virtAddr);
+  for(;;){
+    if((PTE = moveThroughPages(pagetable, start, 1)) == 0){
+    	return -1;}
+    if(*PTE & (1<<0))
+      my_printf(" i am panicked : mappages: remap\n");
+    *PTE = ((((((unsigned long)phyAddr) >> 12) << 10)) | perms | (1<<0));
+    unsigned long x = phyAddr;
+    if(start == end){
+    	// my_printf(" start == end \n");
+    	// my_printf(" linker text end : %d\n" , linker_textAddr);
+      break;
+      
+    }
+    // my_printf("mapppig. .......%d to %d with perm %d\n ::" , start , x,perms);
+
+    start =  start + PAGE_SIZE;
+    phyAddr =phyAddr  + PAGE_SIZE;
+
+  }
+}
+
+
+unsigned long* moveThroughPages(unsigned long * pages , unsigned long virtAddr , int check){
+	for(int i = 2 ; i > 0 ; i--){
+		unsigned long* pte = &pages[PX(i,virtAddr)];
+		if(*pte  & (1<<0)){
+			pages = (unsigned long *)(((*pte) >> 10) << 12);
+		}
+		else {
+      if(!check || (pages = (unsigned long*)memory_alloc()) == 0)
+        return 0;
+      my_memset(pages, 0, PAGE_SIZE);
+      *pte = (((((unsigned long)pages) >> 12) << 10)) | (1<<0);
+    }
+	}
+	// my_printf("mobe return %d\n" ,&pages[PX(0,virtAddr)] );
+	return &pages[PX(0,virtAddr)];
+}
+
 /* 0000
 0000
 0001
@@ -245,88 +324,6 @@ so we will use malloc to to take mem of 4096 byte and use that mem to map thhing
 
 //     return 0;  // Success
 // }
-extern char _text_end[];
-extern char * linker_textAddr = _text_end;
-#define PXMASK          0x1FF // 9 bits
-#define PXSHIFT(level)  (12+(9*(level)))
-#define PX(level, va) ((((unsigned long) (va)) >> PXSHIFT(level)) & PXMASK)
-
-unsigned long * k_pagetable;
-void maketable(){
-	k_pagetable = setupPagetable();
-	asm volatile("sfence.vma zero, zero");
-	satp_write(((8L << 60) | (((unsigned long)k_pagetable) >> 12)));
-	my_printf("satp : %d\n" , ((8L << 60) | (((unsigned long)k_pagetable) >> 12)));
-	asm volatile("sfence.vma zero, zero");
-}
-
-unsigned long *setupPagetable(){
-
-	unsigned long * pagetable;
-	pagetable = (unsigned long*)memory_alloc();
-	my_printf("%d\n" , pagetable);
-	my_memset(pagetable , 0 , PAGE_SIZE);
-
-	map_pages(pagetable,(unsigned long)UART_TX_ADDR,(unsigned long)UART_TX_ADDR,4096,((1<<1)|(1<<2)));
-	// map_pages(pagetable, 0x10001000, 0x10001000, 4096, ((1g<<1)|(1<<2)));
-	my_printf("text - kernal %d\n" ,_text_end-KERNBASE );
-	map_pages(pagetable, KERNBASE, KERNBASE, mem_round_upto_pages((unsigned long)_text_end-KERNBASE), ((1<<1)|(1<<3)));
-
-
-	return pagetable;
-}
-
-void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long phyAddr , unsigned long size , int perms){
-	unsigned long start = 0 ; // start of virtual address!
-	unsigned long end ;   // end of the virtual addr
-
-	unsigned long *PTE;
-	end = virtAddr + size - PAGE_SIZE;
-	start =( unsigned long )virtAddr;
-	my_printf("end : %d\n", end);
-	my_printf("start : %d\n" , virtAddr);
-  for(;;){
-    if((PTE = moveThroughPages(pagetable, start, 1)) == 0){
-    	return -1;}
-    if(*PTE & (1<<0))
-      my_printf(" i am panicked : mappages: remap\n");
-    *PTE = ((((((unsigned long)phyAddr) >> 12) << 10)) | perms | (1<<0));
-    unsigned long x = phyAddr;
-    if(start == end){
-    	my_printf(" start == end \n");
-    	my_printf(" linker text end : %d\n" , linker_textAddr);
-      break;
-      
-    }
-    // my_printf("mapppig. .......%d to %d with perm %d\n ::" , start , x,perms);
-
-    start =  start + PAGE_SIZE;
-    phyAddr =phyAddr  + PAGE_SIZE;
-
-  }
-}
-
-
-unsigned long* moveThroughPages(unsigned long * pages , unsigned long virtAddr , int check){
-	for(int i = 2 ; i > 0 ; i--){
-		unsigned long* pte = &pages[PX(i,virtAddr)];
-		if(*pte  & (1<<0)){
-			pages = (unsigned long *)(((*pte) >> 10) << 12);
-		}
-		else {
-      if(!check || (pages = (unsigned long*)memory_alloc()) == 0)
-        return 0;
-      my_memset(pages, 0, PAGE_SIZE);
-      *pte = (((((unsigned long)pages) >> 12) << 10)) | (1<<0);
-    }
-	}
-	// my_printf("mobe return %d\n" ,&pages[PX(0,virtAddr)] );
-	return &pages[PX(0,virtAddr)];
-}
-
-
-
-
 
 
 
