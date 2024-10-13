@@ -1,4 +1,5 @@
 #include "../Include/PCIE.h"
+#include "core/core.h"
 // https://wiki.osdev.org/PCI
 
 typedef struct {
@@ -14,9 +15,9 @@ pci_device_t pci_registry[] = {
         {0x1AF4,0x1050,setup_pci_vga},                  
     { 0xFFFF, 0xFFFF, NULL },
 };
-static int count  = 0;
+
 uint32_t pci_read(uint32_t offset) {
-    return *((volatile uint32_t *)(PCI_BASE_ADDR + offset));
+    return *((volatile uint32_t *)((uintptr_t)(PCI_BASE_ADDR + offset)));
 }
 void enumerate_pci_devices() {
     uint32_t offset = 0;
@@ -73,8 +74,8 @@ void setup_pci_vga() {
     write_volatile(dev_base + 6, 0xFFFFFFFF);  // dev_base + 6 bytes = dev_base + 3 (32-bit pointers)
     uint32_t io_size = (~read_volatile(dev_base + 6) | 0xF) + 1;  // dev_base + 3 for 6-byte offset
     // my_printf("FB base: %p\n", fb_base);
-    write_volatile(dev_base + 4, (uint32_t)fb_base | 0x8);  // dev_base + 4 bytes = dev_base + 1
-    write_volatile(dev_base + 6, (uint32_t)io_base | 0x8);  // dev_base + 6 bytes = dev_base + 3
+    write_volatile(dev_base + 4, (uint32_t)((uintptr_t)fb_base) | 0x8);  // dev_base + 4 bytes = dev_base + 1
+    write_volatile(dev_base + 6, (uint32_t)((uintptr_t)io_base) | 0x8);  // dev_base + 6 bytes = dev_base + 3
     uint32_t *cmd = dev_base;
     write_volatile(cmd + 1, read_volatile(cmd + 1) | 0x0002);  // cmd register at dev_base + 1
     my_printf("VGA fb_base: %p, size: %d MB, io_base: %p, io_size: %x\n",

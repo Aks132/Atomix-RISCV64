@@ -5,7 +5,7 @@
 #define PALETTE_SIZE 256
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
-
+void set_mode13();
 void putpixel(int pos_x, int pos_y, unsigned char VGA_COLOR);
 void makeWhite();
 void makeBlack();

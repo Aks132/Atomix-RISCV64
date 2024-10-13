@@ -1,5 +1,6 @@
 #pragma once
 
+#define UNUSED(x) (void)(x)
 
 extern int main();
 unsigned long mhartid();

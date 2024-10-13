@@ -25,7 +25,7 @@ so we will use malloc to to take mem of 4096 byte and use that mem to map thhing
 
 */ 
 extern char _text_end[];
-extern char * linker_textAddr = _text_end;
+
 #define MASKNINEBIT          0x1FF // 9 bits
 #define PHYSICALSHIFT(level)  (12+(9*(level)))
 #define PX(level, va) ((((unsigned long) (va)) >> PHYSICALSHIFT(level)) & MASKNINEBIT)
@@ -66,11 +66,12 @@ void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long
 	// my_printf("start : %d\n" , virtAddr);
   for(;;){
     if((PTE = moveThroughPages(pagetable, start, 1)) == 0){
-    	return -1;}
+    	return;}
     if(*PTE & (1<<0))
       my_printf(" i am panicked : mappages: remap\n");
     *PTE = ((((((unsigned long)phyAddr) >> 12) << 10)) | perms | (1<<0));
     unsigned long x = phyAddr;
+	UNUSED(x);
     if(start == end){
     	// my_printf(" start == end \n");
     	// my_printf(" linker text end : %d\n" , linker_textAddr);

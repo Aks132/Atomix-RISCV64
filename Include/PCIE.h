@@ -4,7 +4,7 @@
 #include "../Include/libc/Wprintf.h"
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
-
+typedef unsigned long uintptr_t;
 
 //https://wiki.osdev.org/PCI#Enumerating_PCI_Buses
 

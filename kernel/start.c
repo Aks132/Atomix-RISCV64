@@ -105,7 +105,7 @@ void Start(){
     write_medeleg(0xFFFF);
     write_mideleg(0xFFFF);
     sieregister = sie_read();
-    sieregister |((1UL << 1) | (1UL << 5) | (1UL << 9)); // enable 3 int for s mode
+    sieregister |= ((1UL << 1) | (1UL << 5) | (1UL << 9)); // enable 3 int for s mode
     sie_write(sieregister |((1UL << 1) | (1UL << 5) | (1UL << 9)));
 
     // I also wanted to give OS access to whole memory and then implement pagin while in the supervisor mode

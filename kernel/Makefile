@@ -40,7 +40,7 @@ BUILD_DIR = ../build
 LIBC_DIR = $(INCLUDE_DIR)/libc
 
 # Compiler and linker flags
-CFLAGS = -mcmodel=medany -O -I$(INCLUDE_DIR) -I$(LIBC_DIR)
+CFLAGS = -mcmodel=medany -O -I$(INCLUDE_DIR) -I$(LIBC_DIR) -Wall -Werror
 
 # Create build directory if it doesn't exist
 $(BUILD_DIR):

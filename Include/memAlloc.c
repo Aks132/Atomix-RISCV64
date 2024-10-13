@@ -1,11 +1,12 @@
 #include "../Include/memAlloc.h"
+#include "core/core.h"
 
 
 extern unsigned long _end_;
 extern unsigned long FINAL_END[];
 extern unsigned long _text_start[];
 
-static int nu_of_pages = 0;
+
 inline unsigned long mem_round_upto_pages(unsigned long memTobeAllign) {
     return (memTobeAllign + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
 }
@@ -28,7 +29,8 @@ void PageTraversal(void *physicalADDRstart , void* physicalADDRend){
     // my_printf("%d\n",PAGE_SIZE);
     for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
         freememory(currenttraversalPointer);
-        static int freememcall = 0;
+        static int freememcall = 0 ;
+        UNUSED(freememcall);
         // my_printf(" currenttraversalPointer insiode for %d\n",(char*)currenttraversalPointer);
         // my_printf("Free memory function call counter %d\n" , freememcall++);
     }
@@ -91,9 +93,7 @@ void* memory_alloc(){
 
 void  *my_memset(void *b, int c, int len)
 {
-  int           i;
   unsigned char *p = b;
-  i = 0;
   while(len > 0)
     {
       // my_printf(" i am in memset\n");
