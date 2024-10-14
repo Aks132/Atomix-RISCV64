@@ -1,34 +1,34 @@
 #ifndef MUTEX_H
 #define MUTEX_H
 
-#include "../include/libc/bool.h"
+#include "mutex/threads.h" // Include thread management for thread descriptors
+
+// Structure for the thread waiting queue
+typedef struct _pthread_queue {
+    pthread_descr *head;  // First element in the queue
+    pthread_descr *tail;  // Last element in the queue
+} pthread_queue;
 
 // Mutex structure definition
 typedef struct {
-    volatile int lock;               // Lock variable (0 = unlocked, 1 = locked)
-    char *name;                      // Mutex name for debugging purposes
-    int owner_thread_id;             // ID of the thread that owns the mutex
-    int recursive_count;             // Count of recursive locks
+    volatile int m_spinlock;      // Spinlock for atomic operations
+    int m_count;                  // 0 if unlocked, 1 if locked
+    int m_owner;                  // Thread ID of the current owner
+    pthread_queue m_waiting;      // Queue for waiting threads
 } mutex_t;
 
-// Semaphore structure definition
-typedef struct semaphore {
-    int count;
-    mutex_t mutex;
-} semaphore_t;
+// Function prototypes
+void mutex_init(mutex_t *mutex);                     // Initialize mutex
+void mutex_lock(mutex_t *mutex, pthread_descr *self);  // Lock the mutex
+void mutex_unlock(mutex_t *mutex, pthread_descr *self); // Unlock the mutex
 
-// Function prototypes for Mutex
-void mutex_init(mutex_t *mutex, char *name);
-void mutex_lock(mutex_t *mutex);
-int mutex_trylock(mutex_t *mutex);
-void mutex_unlock(mutex_t *mutex);
+// Queue management function prototypes
+void queue_init(pthread_queue *q);                   // Initialize a queue
+void enqueue(pthread_queue *q, pthread_descr *th);    // Add thread to queue
+pthread_descr *dequeue(pthread_queue *q);             // Remove thread from queue
 
-// Function prototypes for Semaphore
-void sem_init(semaphore_t *sem, int value);
-void sem_wait(semaphore_t *sem);
-void sem_signal(semaphore_t *sem);
-
-// Stub for priority inversion handling
-void handle_priority_inversion(mutex_t *mutex, int requesting_thread_priority);
+// Spinlock helper functions
+void acquire(int *spinlock);                         // Acquire the spinlock
+void release(int *spinlock);                         // Release the spinlock
 
 #endif // MUTEX_H

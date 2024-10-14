@@ -1,6 +1,6 @@
-#include "../include/libc/types.h"
-#include "../include/syscon/syscon.h"
-#include "../include/uart/uart.h"
+#include "libc/types.h"
+#include "syscon/syscon.h"
+#include "uart/uart.h"
 
 void poweroff(void) {
   UART_SEND("Poweroff requested");

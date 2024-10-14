@@ -1,4 +1,6 @@
-#include "../Include/uart/uart.h"
+#include "uart/uart.h"
+#include "mutex/mutex.h"
+#include "mutex/threads.h"
 
 #define UART        0x10000000
 #define UART_THR    (volatile unsigned char*)(UART + 0x00) // THR: Transmitter holding register
@@ -29,6 +31,7 @@ void UART_SEND(const char *str) {
     }
 }
 void uart_init(void){
+
 
 
 }

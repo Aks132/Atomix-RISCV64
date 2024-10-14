@@ -1,6 +1,8 @@
-#include "../Include/libc/Wprintf.h"
-#include "../Include/libc/bool.h"
-#include "../Include/libc/stdarg.h"
+#include "Wprintf.h"
+#include "bool.h"
+#include "stdarg.h"
+
+mutex_t uart_mutex;
 
 status_t PrintChar(const char x) {
     char temp[2] = {x, '\0'};
@@ -58,10 +60,10 @@ char* itoa(int num, char* str, int base) {
     return str;
 }
 
-// Custom printf function
 void my_printf(const char *format, ...) {
     va_list args;
     va_start(args, format);
+    mutex_lock(&uart_mutex,&threads[mhartid()]);
 
     while (*format) {
         if (*format == '%') {
@@ -72,7 +74,7 @@ void my_printf(const char *format, ...) {
                     lib_putc(ch); // Use lib_putc
                     break;
                 }
-                case 'd': { // Decimal
+                case 'd': { // Decimal (unsigned long)
                     unsigned long num = va_arg(args, unsigned long);
                     PrintDigit(num);
                     break;
@@ -94,6 +96,26 @@ void my_printf(const char *format, ...) {
                     PrintHex((unsigned long)ptr); // Print the pointer in hex
                     break;
                 }
+                case 'u': { // Unsigned decimal
+                    unsigned int num = va_arg(args, unsigned int);
+                    PrintDigit(num);
+                    break;
+                }
+                case 'l': { // Long long
+                    format++; // Move to next character (should be 'u' or 'd')
+                    if (*format == 'u') { // Handle %llu
+                        unsigned long long num = va_arg(args, unsigned long long);
+                        PrintDigit(num); // Print unsigned long long
+                    } else if (*format == 'd') { // Handle %lld
+                        long long num = va_arg(args, long long);
+                        PrintDigit(num); // Print signed long long
+                    } else { // Handle unsupported specifier
+                        lib_putc('%'); // Print the '%' sign
+                        lib_putc('l'); // Print 'l' for clarity
+                        lib_putc(*format); // Print the format specifier
+                    }
+                    break;
+                }
                 default: // Unknown format specifier
                     lib_putc('%'); // Print the '%' sign
                     lib_putc(*format); // Print the format specifier
@@ -105,5 +127,7 @@ void my_printf(const char *format, ...) {
         }
         format++;
     }
+    
+    mutex_unlock(&uart_mutex,&threads[mhartid()]);
     va_end(args);
 }

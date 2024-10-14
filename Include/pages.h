@@ -1,10 +1,10 @@
 #pragma once
 
 
-#include "../Include/memAlloc.h"
-#include "../Include/uart/uart.h"
-#include "../Include/core/core.h"
-#include "../Include/systemaddr.h"
+#include "memAlloc.h"
+#include "uart/uart.h"
+#include "core/core.h"
+#include "systemaddr.h"
 void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long phyAddr , unsigned long size , int perms);
 // unsigned long* makepagetable();
 unsigned long *setupPagetable();

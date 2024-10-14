@@ -1,101 +1,89 @@
-#include "mutex.h"
-#include "../include/libc/bool.h"
-#include "../include/core/core.h"
-
-
-
-// Inline atomic exchange function
-static inline int atomic_exchange(volatile int *ptr, int newval) {
-    int result;
-    asm volatile("amoswap.w %0, %2, %1"
-                 : "=r"(result), "+A"(*ptr)
-                 : "r"(newval)
-                 : "memory");
-    return result;
-}
+#include "mutex/mutex.h"
 
 // Initialize the mutex
-void mutex_init(mutex_t *mutex, char *name) {
-    mutex->lock = 0;  // 0 means unlocked
-    mutex->name = name;
-    mutex->owner_thread_id = -1;  // No owner initially
-    mutex->recursive_count = 0;   // No recursive locks initially
+void mutex_init(mutex_t *mutex) {
+    mutex->m_spinlock = 0;  // Spinlock is free
+    mutex->m_count = 0;     // Mutex is unlocked
+    mutex->m_owner = -1;    // No owner initially
+    queue_init(&mutex->m_waiting);  // Initialize the waiting queue
 }
 
-// Lock the mutex
-void mutex_lock(mutex_t *mutex) {
-    int thread_id = tp_read(); // Get current thread ID
-    
-    DisableInterrupt(); // Disable interrupts to prevent race conditions
+// Lock the mutex, blocking if necessary
+void mutex_lock(mutex_t *mutex, pthread_descr *self) {
+    acquire(&mutex->m_spinlock);  // Acquire the spinlock for atomic operation
 
-    // Handle recursive locking
-    if (mutex->owner_thread_id == thread_id) {
-        mutex->recursive_count++;
-        EnableInterrupt(); // Re-enable interrupts
-        return; // No need to lock again
+    if (mutex->m_count == 0) {
+        // Mutex is free, lock it
+        mutex->m_count = 1;
+        mutex->m_owner = self->p_tid;
+        release(&mutex->m_spinlock);  // Release the spinlock
+    } else {
+        // Mutex is locked, put the thread in the waiting queue
+        enqueue(&mutex->m_waiting, self);
+        release(&mutex->m_spinlock);  // Release the spinlock
+        suspend(self);  // Suspend the thread until it's woken up
     }
-
-    // Spinlock with optional yield to avoid busy-waiting
-    while (__sync_lock_test_and_set(&mutex->lock, 1) != 0) {
-        // Uncomment and replace with a proper yield/sleep function
-        // yield();  // Consider implementing a yield function to reduce CPU usage
-    }
-    
-    // Set ownership and count
-    mutex->owner_thread_id = thread_id;  
-    mutex->recursive_count = 1;           
-    __sync_synchronize(); // Ensure memory visibility
-    
-    EnableInterrupt(); // Re-enable interrupts
 }
 
-// Unlock the mutex
-void mutex_unlock(mutex_t *mutex) {
-    int thread_id = mhartid(); // Get current thread ID
+// Unlock the mutex and wake up a waiting thread if any
+void mutex_unlock(mutex_t *mutex, pthread_descr *self) {
+    acquire(&mutex->m_spinlock);  // Acquire the spinlock for atomic operation
 
-    DisableInterrupt(); // Disable interrupts to prevent race conditions
-    
-    // Ensure the mutex is owned by the current thread
-    if (mutex->owner_thread_id != thread_id) {
-        EnableInterrupt(); // Re-enable interrupts
-        return; // Exit without unlocking
-    }
-    
-    // Handle recursive unlock
-    if (--mutex->recursive_count == 0) {
-        // Release the lock and reset ownership
-        mutex->owner_thread_id = -1;
-        __sync_synchronize();  // Ensure memory visibility
-        __sync_lock_release(&mutex->lock);  // Release the lock
-    }
-    
-    EnableInterrupt(); // Re-enable interrupts
-}
-
-// Initialize the semaphore
-void sem_init(semaphore_t *sem, int initial_count) {
-    sem->count = initial_count;
-    mutex_init(&sem->mutex, "semaphore_mutex");
-}
-
-// Wait on the semaphore
-void sem_wait(semaphore_t *sem) {
-    while (1) {
-        mutex_lock(&sem->mutex);
-        if (sem->count > 0) {
-            sem->count--;
-            mutex_unlock(&sem->mutex);
-            break;
+    if (mutex->m_owner == self->p_tid) {
+        // The thread is the owner of the mutex
+        pthread_descr *next_thread = dequeue(&mutex->m_waiting);
+        if (next_thread != (pthread_descr *)0) {
+            // Wake up the next thread in the queue
+            restart(next_thread);
+        } else {
+            // No threads waiting, simply unlock the mutex
+            mutex->m_count = 0;
+            mutex->m_owner = -1;
         }
-        mutex_unlock(&sem->mutex);
-        // yield(); // Consider yielding CPU to avoid busy-waiting
+    }
+    
+    release(&mutex->m_spinlock);  // Release the spinlock
+}
+
+// Initialize a waiting queue
+void queue_init(pthread_queue *q) {
+    q->head = (pthread_descr *)0;
+    q->tail = (pthread_descr *)0;
+}
+
+// Enqueue a thread into the waiting queue
+void enqueue(pthread_queue *q, pthread_descr *th) {
+    th->p_nextwaiting = (pthread_descr *)0;
+    if (q->tail == (pthread_descr *)0) {
+        q->head = th;
+        q->tail = th;
+    } else {
+        q->tail->p_nextwaiting = th;
+        q->tail = th;
     }
 }
 
-// Signal the semaphore
-void sem_signal(semaphore_t *sem) {
-    mutex_lock(&sem->mutex);
-    sem->count++;
-    mutex_unlock(&sem->mutex);
+// Dequeue a thread from the waiting queue
+pthread_descr *dequeue(pthread_queue *q) {
+    pthread_descr *th = q->head;
+    if (th != (pthread_descr *)0) {
+        q->head = th->p_nextwaiting;
+        if (q->head == (pthread_descr *)0) {
+            q->tail = (pthread_descr *)0;
+        }
+        th->p_nextwaiting = (pthread_descr *)0;
+    }
+    return th;
 }
 
+// Acquire a spinlock (busy-wait)
+void acquire(int *spinlock) {
+    while (__sync_lock_test_and_set(spinlock, 1)) {
+        // Busy wait until the spinlock becomes free
+    }
+}
+
+// Release a spinlock
+void release(int *spinlock) {
+    __sync_lock_release(spinlock);  // Release the spinlock
+}

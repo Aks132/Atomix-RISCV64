@@ -1,9 +1,13 @@
 #ifndef WPRINTF
 #define WPRINTF
 
-#include "../Include/libc/stdarg.h"
-#include "../Include/status.h"
-#include "../Include/uart/uart.h"
+#include "libc/stdarg.h"
+#include "status.h"
+#include "uart/uart.h"
+#include "mutex/mutex.h"
+#include "mutex/threads.h"
+
+extern mutex_t uart_mutex;
 
 status_t PrintChar(const char  x);
 status_t PrintDigit(const unsigned long number);

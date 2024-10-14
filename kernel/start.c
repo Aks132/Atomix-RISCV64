@@ -1,8 +1,7 @@
 #include "start.h"
-#include "../Include/mutex/mutex.h"
-#include "../Include/core/core.h"
+#include "mutex/mutex.h"
+#include "core/core.h"
 
-#define NCPU 4
 const char * core0 = "I am core 0! \n";
 const char * core1 = "I am core 1! \n";
 const char * core2 = "I am core 2! \n";
@@ -13,12 +12,11 @@ unsigned long var;
 unsigned long getMPP;
 unsigned long sieregister;
 
-mutex_t my_mutex;
-
 // boot.S needs one stack per CPU.
 
 void Start(){
-    
+    mutex_init(&uart_mutex);
+
 
     var = mstatus_read();
     // MPP -> hold the previous priviliged mode bits :
@@ -68,7 +66,8 @@ void Start(){
   stimecmp_write(time_read() + 1000000);
     
   // keep each CPU's hartid in its tp register, for cpuid().
-  //id = mhartid();
+  id = mhartid();
+  my_printf("hart %d starting\n", id);
 
   mret();
 
@@ -78,11 +77,11 @@ void Core0_Init(){
     // mutex_lock(&my_mutex);
     // Println();
     // Println();
-    // my_printf("%s",core0);
+    //my_printf("%s",core0);
     // Println();
     // Println();
     // mutex_unlock(&my_mutex);
-     Start();
+    Start();
 }
 
 void Core1_Init(){
@@ -91,7 +90,7 @@ void Core1_Init(){
     // mutex_lock(&my_mutex);
     // Println();
     // Println();
-    // my_printf("%s",core1);
+    //my_printf("%s",core1);
     // Println();
     // Println();
     // mutex_unlock(&my_mutex);
@@ -104,7 +103,7 @@ void Core2_Init(){
   //   mutex_lock(&my_mutex);
   //   Println();
   //   Println();
-  //  my_printf("%s",core2);
+  // my_printf("%s",core2);
   //   Println();
   //   Println();
   //   mutex_unlock(&my_mutex);
@@ -116,10 +115,10 @@ void Core3_Init(){
   //   mutex_lock(&my_mutex);
   //   Println();
   //   Println();
-  //  my_printf("%s",core3);
+  //my_printf("%s",core3);
   //   Println();
   //   Println();
-    //mutex_unlock(&my_mutex);
-    // main();
+  //mutex_unlock(&my_mutex);
+  // main();
     Start();
 }

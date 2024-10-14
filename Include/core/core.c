@@ -1,5 +1,5 @@
 #include "core.h"
-#include "../include/libc/Wprintf.h"
+#include "libc/Wprintf.h"
 /*
   This file contains all the c functions associated with the core register 
 
@@ -169,11 +169,9 @@ void tp_write(unsigned long hartid) {
 
 void EnableInterrupt(){
   sstatus_write(sstatus_read() | (1UL << 1));
-  //my_printf("Enabled Interupt\n");
 }
 void DisableInterrupt(){
 
   sstatus_write(sstatus_read() & ~(1UL << 1));
-  //my_printf("Disabled Interupt\n");
 }
 

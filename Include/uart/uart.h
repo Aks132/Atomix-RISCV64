@@ -10,6 +10,8 @@
 #define UART_LSR_OFFSET 0x05 // Line Status Register
 #define UART_LSR_TX_EMPTY (1 << 5) // Line Status Register TX empty flag
 
+//extern mutex_t uart_mutex;
+
 // Function prototypes
 void uart_init(void);
 void lib_putc(char ch);
