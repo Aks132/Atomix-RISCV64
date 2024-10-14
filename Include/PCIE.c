@@ -12,7 +12,7 @@ typedef struct {
 //https://www.qemu.org/docs/master/specs/pci-ids.html
 pci_device_t pci_registry[] = {
     { 0x1B36, 0x0008, setup_qemu_pci_bridge },
-        {0x1AF4,0x1050,setup_pci_vga},                  
+    {0x1AF4,0x1050,setup_pci_vga},                  
     { 0xFFFF, 0xFFFF, NULL },
 };
 

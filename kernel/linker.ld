@@ -34,6 +34,10 @@ SECTIONS
   .text : {
     PROVIDE(_text_start = .);
     *(.text .text.*)
+    . = ALIGN(0x1000);
+    _trampoline = .;
+    *(.tramp) 
+    . = ALIGN(0x1000);
     PROVIDE(_text_end = .);
   } >ram AT>ram :text
 

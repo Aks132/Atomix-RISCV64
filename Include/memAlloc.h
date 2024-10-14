@@ -11,8 +11,7 @@
 
 void  *my_memset(void *b, int c, int len);
 
-#define KERNELEND 		  (BASEADDDRKERNEL + (128*1024*1024)) 
-#define PAGE_SIZE 		  4096
+
 //16777216
 //
 void  *my_memset(void *b, int c, int len);

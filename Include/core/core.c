@@ -10,6 +10,13 @@ unsigned long mhartid()
   asm volatile("csrr %0, mhartid" : "=r" (x) );
   return x;
 }
+unsigned long 
+r_tp()
+{
+  unsigned long x;
+  asm volatile("mv %0, tp" : "=r" (x) );
+  return x;
+}
 
 unsigned long mstatus_read()
 {
@@ -95,6 +102,10 @@ inline unsigned long sstatus_read(){
   asm volatile("csrr %0 ,sstatus" : "=r" (x));
   return x;
 }
+void write_sscratch(unsigned long value) {
+  asm volatile("csrw sscratch, %0" : : "r"(value));
+}
+
 void EnableInterrupt(){
   sstatus_write(sstatus_read() | (1UL << 1));
   my_printf("Interupt enabled\n");

@@ -9,10 +9,14 @@ unsigned long var;
 unsigned long getMPP;
 unsigned long sieregister;
 
-
+static inline void 
+w_tp(unsigned long x)
+{
+  asm volatile("mv tp, %0" : : "r" (x));
+}
 void Start(){
-    id = mhartid();
-    // my_printf("%d\n",id);
+    w_tp(mhartid());
+    my_printf(" tp %d\n" ,r_tp()); // execption !!
 
 
     if(id == 0)
@@ -124,11 +128,11 @@ void Core0_Init(){
     // mutex_lock(&my_mutex);
     // Println();
     // Println();
-    my_printf("0\n");
+    // my_printf("0\n");
     // Println();
     // Println();
     // mutex_unlock(&my_mutex);
-    Start();
+    // Start();
 }
 
 void Core1_Init(){
@@ -136,22 +140,22 @@ void Core1_Init(){
 
     // Println();
     // Println();
-    my_printf("1\n");
+    // my_printf("1\n");
     // Println();
     // Println();
     // mutex_unlock(&my_mutex);
-  // Start();
+//   Start();
 }
 
 void Core2_Init(){
 //     mutex_lock(&my_mutex);
 //     Println();
     // Println();
-    my_printf("2\n");
+    // my_printf("2\n");
     // Println();
 //     Println();
 //     mutex_unlock(&my_mutex);
-  //  Start();
+//    Start();
 }
 
 void Core3_Init(){
@@ -159,9 +163,9 @@ void Core3_Init(){
 
 //     Println();
     // Println();
-    my_printf("3\n");
+    // my_printf("3\n");
     // Println();
 //     Println();
 //     mutex_unlock(&my_mutex);
-  // Start();
+//   Start();
 }

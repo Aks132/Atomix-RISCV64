@@ -24,3 +24,11 @@ void sstatus_write(unsigned long x);
 unsigned long sstatus_read();
 void DisableInterrupt();
 void EnableInterrupt();
+void write_sscratch(unsigned long value);
+
+
+#define PAGE_SIZE 		  4096
+#define MAX_VIRTUAL_ADDR ((1L << (38)))
+#define TRAMPOLINE_COMMMON_REGION (MAX_VIRTUAL_ADDR - PAGE_SIZE)
+#define KERNELEND 		  (BASEADDDRKERNEL + (128*1024*1024)) 
+#define TRAPFRAME (TRAMPOLINE_COMMMON_REGION - PAGE_SIZE)
