@@ -1,9 +1,9 @@
 #ifndef WPRINTF
 #define WPRINTF
 
-#include "../Include/libc/stdarg.h"
-#include "../Include/status.h"
-#include "../Include/uart/uart.h"
+#include "stdarg.h"
+#include "status.h"
+#include "uart/uart.h"
 
 status_t PrintChar(const char  x);
 status_t PrintDigit(const unsigned long number);

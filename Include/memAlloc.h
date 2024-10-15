@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Include/uart/uart.h"
-#include "../Include/mutex/mutex.h"
-#include "../Include/libc/Wprintf.h"
+#include "uart/uart.h"
+#include "mutex/mutex.h"
+#include "Wprintf.h"
 
 #define BASEADDDRKERNEL 0x80000000UL
 

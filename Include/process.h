@@ -11,7 +11,7 @@ typedef struct {
   uint64 ra;
 
   uint64 s0;
-  uint64 s1;.
+  uint64 s1;
   uint64 s2;
   uint64 s3;
   uint64 s4;

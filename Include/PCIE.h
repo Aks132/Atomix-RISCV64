@@ -1,7 +1,7 @@
 //riscV/vict.h
 #pragma once
 
-#include "../Include/libc/Wprintf.h"
+#include "Wprintf.h"
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 typedef unsigned long uintptr_t;

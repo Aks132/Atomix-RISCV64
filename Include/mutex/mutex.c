@@ -1,6 +1,6 @@
 #include "mutex.h"
-#include "../include/libc/bool.h"
-#include "../include/core/core.h"
+#include "libc/bool.h"
+#include "core/core.h"
 
 /* chapter 7: of RISC-V-SPEC-v2.2 
 

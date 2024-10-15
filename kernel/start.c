@@ -15,9 +15,7 @@ w_tp(unsigned long x)
   asm volatile("mv tp, %0" : : "r" (x));
 }
 void Start(){
-    w_tp(mhartid());
-    my_printf(" tp %d\n" ,r_tp()); // execption !!
-
+   
 
     if(id == 0)
     {
@@ -132,7 +130,7 @@ void Core0_Init(){
     // Println();
     // Println();
     // mutex_unlock(&my_mutex);
-    // Start();
+    Start();
 }
 
 void Core1_Init(){

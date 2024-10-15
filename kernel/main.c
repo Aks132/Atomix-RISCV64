@@ -4,7 +4,7 @@
 int main()
 {
 
-    if(r_tp() == 0){
+    
     unsigned long mstatus = mstatus_read();  // Read the mstatus register
     unsigned long current_privilege = ((mstatus >> 11) & 0x3);  // Extract the current privilege mode
 
@@ -23,4 +23,3 @@ int main()
    
     }
 
-}
