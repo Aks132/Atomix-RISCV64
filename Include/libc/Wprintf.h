@@ -1,11 +1,10 @@
-#ifndef WPRINTF
-#define WPRINTF
+#ifndef __WPRINTF_H__
+#define __WPRINTF_H__
 
 #include "libc/stdarg.h"
 #include "status.h"
 #include "uart/uart.h"
 #include "mutex/mutex.h"
-#include "mutex/threads.h"
 
 extern mutex_t uart_mutex;
 

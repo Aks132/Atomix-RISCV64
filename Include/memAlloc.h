@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MEMALLOC_H__
+#define __MEMALLOC_H__
 
 #include "uart/uart.h"
 #include "mutex/mutex.h"
@@ -35,3 +36,6 @@ void PageTraversal(void *physicalADDRstart , void* physcalADDRend);
 void freememory (void *mem);
 void* memory_alloc();
 void kernel_mem_init();
+
+#endif //__MEMALLOC_H__
+

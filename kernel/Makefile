@@ -23,7 +23,6 @@ c:
 	$(CROSS_COMPILE)gcc $(CFLAGS) main.c -c -o $(BUILD_DIR)/main.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/uart/uart.c -c -o $(BUILD_DIR)/uart.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/mutex/mutex.c -c -o $(BUILD_DIR)/mutex.o
-	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/mutex/threads.c -c -o $(BUILD_DIR)/threads.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/core/core.c -c -o $(BUILD_DIR)/core.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/memAlloc.c -c -o $(BUILD_DIR)/memAlloc.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/syscon/syscon.c -c -o $(BUILD_DIR)/syscon.o
@@ -31,7 +30,7 @@ c:
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/mtime/mtime.c -c -o $(BUILD_DIR)/mtime.o
 
 link:
-	$(CROSS_COMPILE)ld -T linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/print.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/mutex.o $(BUILD_DIR)/memAlloc.o $(BUILD_DIR)/core.o $(BUILD_DIR)/threads.o $(BUILD_DIR)/syscon.o $(BUILD_DIR)/mtime.o $(BUILD_DIR)/start.o $(BUILD_DIR)/main.o $(BUILD_DIR)/pages.o -o $(BUILD_DIR)/kernel.elf -Map $(BUILD_DIR)/kernel.map
+	$(CROSS_COMPILE)ld -T linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/print.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/mutex.o $(BUILD_DIR)/memAlloc.o $(BUILD_DIR)/core.o $(BUILD_DIR)/syscon.o $(BUILD_DIR)/mtime.o $(BUILD_DIR)/start.o $(BUILD_DIR)/main.o $(BUILD_DIR)/pages.o -o $(BUILD_DIR)/kernel.elf -Map $(BUILD_DIR)/kernel.map
 
 # QEMU target for normal execution
 qemu: all

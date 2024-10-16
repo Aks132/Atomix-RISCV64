@@ -1,7 +1,8 @@
-#pragma once
+#ifndef _HEADER
+#define _HEADER
 
 #include "sysprints.h"
-#include "extras.h"
+#include "start.h"
 #include "libc/Wprintf.h"
 #include "uart/uart.h"
 #include "core/core.h"
@@ -10,4 +11,7 @@
 #include "pages.h"
 #include "mtime/mtime.h"
 #include "mutex/mutex.h"
-#include "mutex/threads.h"
+
+#endif //_HEADER
+
+
