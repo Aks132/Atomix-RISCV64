@@ -4,3 +4,4 @@
 *.map
 *.vscode
 build/*
+.DS_Store

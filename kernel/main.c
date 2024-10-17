@@ -64,8 +64,8 @@ int main()
 { 
     if(mhartid() == 0){
         sys_init();
-        //kernel_mem_init();
-        //maketable();
+        kernel_mem_init();
+        maketable();
         poweroff();
     }
 }
