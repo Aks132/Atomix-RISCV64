@@ -1,10 +1,8 @@
-#ifndef __MEMALLOC_H__
-#define __MEMALLOC_H__
+#pragma once 
 
 #include "uart/uart.h"
 #include "mutex/mutex.h"
 #include "libc/Wprintf.h"
-
 #define BASEADDDRKERNEL 0x80000000UL
 
 #define KERNELEND 		(BASEADDDRKERNEL + (128*1024*1024)) 
@@ -12,8 +10,7 @@
 
 void  *my_memset(void *b, int c, int len);
 
-#define KERNELEND 		  (BASEADDDRKERNEL + (128*1024*1024)) 
-#define PAGE_SIZE 		  4096
+
 //16777216
 //
 void  *my_memset(void *b, int c, int len);
@@ -36,6 +33,3 @@ void PageTraversal(void *physicalADDRstart , void* physcalADDRend);
 void freememory (void *mem);
 void* memory_alloc();
 void kernel_mem_init();
-
-#endif //__MEMALLOC_H__
-

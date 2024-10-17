@@ -11,7 +11,7 @@ void map_pages(unsigned long *pagetable , unsigned long virtAddr , unsigned long
 // unsigned long* makepagetable();
 unsigned long *setupPagetable();
 unsigned long* moveThroughPages(unsigned long * pages , unsigned long virtAddr , int check);
-
+void maketable();
 
 #endif //__PAGES_H__
 

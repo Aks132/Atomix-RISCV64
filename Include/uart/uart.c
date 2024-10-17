@@ -14,7 +14,7 @@ void uart_init(void){
 void lib_putc(char ch) {
     while ((*UART_LSR & UART_LSR_EMPTY_MASK) == 0);
     *UART_THR = ch;
-    return 0;
+    return;
 }
 
 void lib_puts(const char *s) {

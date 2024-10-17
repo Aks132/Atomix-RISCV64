@@ -1,6 +1,7 @@
 #ifndef CORE_H
 #define CORE_H
 #include "libc/types.h"
+#define UNUSED(x) (void)(x)
 
 
 
