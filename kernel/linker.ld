@@ -69,9 +69,9 @@ SECTIONS
     . = . + 4096*4;
     PROVIDE(_stack_end = .);
   } >ram AT>ram :stack 
- 
+ PROVIDE(_end_ = .); 
 } 
 
        
-     PROVIDE(_end_ = .); 
+
     PROVIDE(_memory_start = ORIGIN(ram));

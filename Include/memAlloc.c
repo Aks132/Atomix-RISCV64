@@ -1,4 +1,4 @@
-#include "../Include/memAlloc.h"
+#include "memAlloc.h"
 
 
 extern unsigned long _end_;
@@ -53,7 +53,7 @@ void freememory (void *mem){
 void kernel_mem_init(){
     // Initialise locks for mem handling !!
     my_printf("kernel mem init");
-    mutex_init(&memLock.lock , "memelock");
+    mutex_init(&memLock.lock,"memory lock");
     // We have to make mem amd specify the page table as till now we have not performed any mem operation!
     // memLock.lock.lock = 1;
     // my_printf("%d",memLock.lock);

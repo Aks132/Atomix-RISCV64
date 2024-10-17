@@ -1,4 +1,4 @@
-#include "../Include/pages.h"
+#include "pages.h"
 /*
 	My basic intutition to do this 
 
@@ -267,10 +267,10 @@ unsigned long *setupPagetable(){
 	my_printf("%d\n" , pagetable);
 	my_memset(pagetable , 0 , PAGE_SIZE);
 
-	map_pages(pagetable,(unsigned long)UART_TX_ADDR,(unsigned long)UART_TX_ADDR,4096,((1<<1)|(1<<2)));
-	// map_pages(pagetable, 0x10001000, 0x10001000, 4096, ((1g<<1)|(1<<2)));
+	// map_pages(pagetable,(unsigned long)UART_TX_ADDR,(unsigned long)UART_TX_ADDR,4096,((1<<1)|(1<<2)));
+	// map_pages(pagetable, 0x10001000, 0x10001000, 4096, ((1<<1)|(1<<2)));
 	my_printf("text - kernal %d\n" ,_text_end-KERNBASE );
-	map_pages(pagetable, KERNBASE, KERNBASE, mem_round_upto_pages((unsigned long)_text_end-KERNBASE), ((1<<1)|(1<<3)));
+	map_pages(pagetable, KERNBASE, KERNBASE, (unsigned long)_text_end-KERNBASE, ((1<<1)|(1<<3)));
 
 
 	return pagetable;

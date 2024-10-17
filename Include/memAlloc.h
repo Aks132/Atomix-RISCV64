@@ -1,8 +1,9 @@
-#pragma once
+#ifndef __MEMALLOC_H__
+#define __MEMALLOC_H__
 
-#include "../Include/uart/uart.h"
-#include "../Include/mutex/mutex.h"
-#include "../Include/libc/Wprintf.h"
+#include "uart/uart.h"
+#include "mutex/mutex.h"
+#include "libc/Wprintf.h"
 
 #define BASEADDDRKERNEL 0x80000000UL
 
@@ -35,3 +36,6 @@ void PageTraversal(void *physicalADDRstart , void* physcalADDRend);
 void freememory (void *mem);
 void* memory_alloc();
 void kernel_mem_init();
+
+#endif //__MEMALLOC_H__
+

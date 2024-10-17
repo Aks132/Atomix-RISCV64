@@ -20,11 +20,16 @@ Open the Terminal and paste the following command:
 git clone https://github.com/Aks132/RISC-V.git
 cd RISC-V
 ```
+### For MacOS 
 ```bash
 chmod +x mac-setup.sh
 sh mac-setup.sh
 ```
-
+### For Ubuntu
+```bash
+chmod +x ubuntu-setup.sh
+sh ubuntu-setup.sh
+```
 
 ### Verify the Installation
 

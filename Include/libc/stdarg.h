@@ -1,7 +1,6 @@
 #ifndef __STDARG_H__
 #define __STDARG_H__
 
-
 typedef __builtin_va_list va_list;
 
 // define vardiac args macros

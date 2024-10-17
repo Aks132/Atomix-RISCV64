@@ -1,10 +1,17 @@
-#pragma once
+#ifndef _HEADER
+#define _HEADER
 
-#include "../Include/sysprints.h"
-#include "../Include/extras.h"
-#include "../include/libc/Wprintf.h"
-#include "../include/uart/uart.h"
-#include "../include/core/core.h"
-#include "../include/syscon/syscon.h"
-#include "../Include/memAlloc.h"
-#include "../Include/pages.h"
+#include "sysprints.h"
+#include "start.h"
+#include "libc/Wprintf.h"
+#include "uart/uart.h"
+#include "core/core.h"
+#include "syscon/syscon.h"
+#include "memAlloc.h"
+#include "pages.h"
+#include "mtime/mtime.h"
+#include "mutex/mutex.h"
+
+#endif //_HEADER
+
+

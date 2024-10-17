@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef __TYPES_H__
+#define __TYPES_H__
 
 // Basic integer types (replacement for stdint.h)
 typedef unsigned char       uint8_t;
