@@ -1,4 +1,4 @@
-#include "../Include/uart/uart.h"
+#include "uart.h"
 
 #define UART        0x10000000
 #define UART_THR    (volatile unsigned char*)(UART + 0x00) // THR: Transmitter holding register

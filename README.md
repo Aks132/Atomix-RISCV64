@@ -25,6 +25,17 @@ chmod +x mac-setup.sh
 sh mac-setup.sh
 ```
 
+### Install for Ubuntu
+Open the Terminal and paste the following command:
+
+```bash
+git clone https://github.com/Aks132/RISC-V.git
+cd RISC-V
+```
+```bash
+chmod +x ubuntu-setup.sh
+sh ubuntu-setup.sh
+```
 
 ### Verify the Installation
 

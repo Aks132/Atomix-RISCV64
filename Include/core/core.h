@@ -1,5 +1,5 @@
 #pragma once
-
+#include "libc/types.h"
 #define UNUSED(x) (void)(x)
 
 extern int main();
@@ -25,7 +25,17 @@ unsigned long sstatus_read();
 void DisableInterrupt();
 void EnableInterrupt();
 void write_sscratch(unsigned long value);
-
+uint64_t mie_read();
+void mie_write(uint64_t x);
+uint64_t menvcfg_read();
+void menvcfg_write(uint64_t x);
+void mcounteren_write(uint64_t x);
+uint64_t mcounteren_read();
+uint64_t stimecmp_read();
+void stimecmp_write(uint64_t x);
+uint64_t time_read();
+uint64_t tp_read();
+void tp_write(unsigned long hartid);
 
 #define PAGE_SIZE 		  4096
 #define MAX_VIRTUAL_ADDR ((1L << (38)))

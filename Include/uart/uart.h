@@ -1,6 +1,6 @@
 #ifndef UART_H
 #define UART_H
-#include "/mutex/mutex.h"
+#include "mutex/mutex.h"
 
 // #define      UART_TX_ADDR      0x10000000UL
  #define      UART_TX_ADDR       0x30000000

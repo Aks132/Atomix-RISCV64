@@ -1,4 +1,4 @@
-#include "../Include/pages.h"
+#include "pages.h"
 /*
 	My basic intutition to do this 
 

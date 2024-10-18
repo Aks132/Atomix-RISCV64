@@ -9,6 +9,4 @@ void TrapCallfromUser(){
     if(sstatus_read() & (1<<8)){
         my_printf("user traped called from user mode !1 \n");
     }
-
-
 }

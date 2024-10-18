@@ -35,8 +35,8 @@ _entry:
     li t1, 3           # Check if hart is 3
     beq t0, t1, init_hart3  
 
-    # If none of the above, jump to main (default behavior)
-    # call main
+    # If none of the above, jump to Start (default behavior)
+    call Start
 
 # Core-specific initialization, setting up their own stack
 
@@ -64,7 +64,7 @@ init_hart2:
     sub sp, sp, t1             # Adjust the stack pointer for Core 2
     la t1, hartid2             # Store hart ID in data memory (for Core 2)
     sw t0, 0(t1)
-    call Core2_Init            # Call core-specific initialization function
+    j Core2_Init            # Call core-specific initialization function
    
 
 init_hart3:
@@ -73,6 +73,5 @@ init_hart3:
     sub sp, sp, t1             # Adjust the stack pointer for Core 3
     la t1, hartid3             # Store hart ID in data memory (for Core 3)
     sw t0, 0(t1)
-    call Core3_Init            # Call core-specific initialization function
+    j Core3_Init            # Call core-specific initialization function
    
-

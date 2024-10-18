@@ -1,6 +1,4 @@
-#ifndef WPRINTF
-#define WPRINTF
-
+#pragma once
 #include "stdarg.h"
 #include "status.h"
 #include "uart/uart.h"
@@ -13,4 +11,3 @@ char* itoa(int num, char* str, int base);
 void Println();
 void my_printf(const char *format, ...);
 
-#endif

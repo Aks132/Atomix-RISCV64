@@ -1,7 +1,3 @@
-#include "mutex.h"
-#include "libc/bool.h"
-#include "core/core.h"
-
 /* chapter 7: of RISC-V-SPEC-v2.2 
 
 rs1: The address of the memory location (your lock variable, ptr).
@@ -16,36 +12,28 @@ link : https://gcc.gnu.org/onlinedocs/gcc-4.6.2/gcc/Atomic-Builtins.html
 
 
 */
-static inline int atomic_exchange(volatile int *ptr, int newval) {
-    int result;
-    asm volatile("amoswap.w %0, %2, %1"
-                 : "=r"(result), "+A"(*ptr)
-                 : "r"(newval)
-                 : "memory");
-    return result;
-}
+#include "mutex.h"
+#include "libc/bool.h"
+#include "core/core.h"
 
-void mutex_init(mutex_t *mutex , char*  name) {
+ void mutex_init(mutex_t *mutex , char*  name) {
     mutex->lock = 0;  // 0 means unlocked
     mutex->name = name;
 }
 
-void mutex_lock(mutex_t  *mutex)
+void mutex_lock(mutex_t* lock)
 {
-  DisableInterrupt();
-  while(__sync_lock_test_and_set(&mutex->lock, 1) != 0);
+  DisableInterrupt(); // disable interrupts to avoid deadlock.
+  while(__sync_lock_test_and_set(&lock->lock, 1) != 0);
   __sync_synchronize();
+
+}
+
+// Release the lock.
+void
+mutex_unlock(mutex_t* lock)
+{
+  __sync_synchronize();
+  __sync_lock_release(&lock->lock);
   EnableInterrupt();
-
-}
-
-int mutex_trylock(mutex_t *mutex) {
-    return atomic_exchange(&mutex->lock, 1) == 0;  // Return true if lock is acquired
-}
-
-void mutex_unlock(mutex_t *mutex) {
-    mutex->lock = 0; // Correctly release the lock
-    __sync_synchronize (); 
-
-
 }
