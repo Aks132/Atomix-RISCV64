@@ -47,4 +47,8 @@ void non_blocking_delay(uint64_t delay_us) {
         }
         // You can perform other tasks or sleep to save CPU cycles here
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241

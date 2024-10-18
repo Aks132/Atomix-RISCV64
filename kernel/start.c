@@ -1,5 +1,10 @@
 #include "start.h"
+<<<<<<< HEAD
 
+=======
+#include "mutex/mutex.h"
+#include "core/core.h"
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
 
 const char * core0 = "I am core 0! \n";
 const char * core1 = "I am core 1! \n";
@@ -34,7 +39,11 @@ void Start() {
     write_medeleg(0xFFFF);
     write_mideleg(0xFFFF);
     sieregister = sie_read();
+<<<<<<< HEAD
     sieregister |= ((1UL << 1) | (1UL << 5) | (1UL << 9)); // Enable 3 ints for S mode
+=======
+    sieregister | ((1UL << 1) | (1UL << 5) | (1UL << 9)); // Enable 3 ints for S mode
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
     sie_write(sieregister | ((1UL << 1) | (1UL << 5) | (1UL << 9)));
 
     pmpaddr0_write(0x3fffffffffffffull);
@@ -68,4 +77,8 @@ void Core2_Init() {
 
 void Core3_Init() {
     Start();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241

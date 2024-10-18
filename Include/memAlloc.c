@@ -1,5 +1,9 @@
 #include "memAlloc.h"
+<<<<<<< HEAD
 #include "core/core.h"
+=======
+
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
 
 
 extern unsigned long _end_;
@@ -30,7 +34,11 @@ void PageTraversal(void *physicalADDRstart , void* physicalADDRend){
     for(; currenttraversalPointer + PAGE_SIZE <= (char*)endofaddr; currenttraversalPointer += PAGE_SIZE){
         freememory(currenttraversalPointer);
         static int freememcall = 0 ;
+<<<<<<< HEAD
         UNUSED(freememcall);
+=======
+        (void)(freememcall);
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
         // my_printf(" currenttraversalPointer insiode for %d\n",(char*)currenttraversalPointer);
         // my_printf("Free memory function call counter %d\n" , freememcall++);
     }

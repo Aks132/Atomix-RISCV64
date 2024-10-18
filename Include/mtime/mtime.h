@@ -18,4 +18,8 @@ void non_blocking_delay(uint64_t delay_us);
 // Timer interrupt handler
 void timer_handler(void);
 
+<<<<<<< HEAD
 #endif // MTIME_H
+=======
+#endif // MTIME_H
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241

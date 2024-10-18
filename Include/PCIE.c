@@ -1,5 +1,9 @@
 #include "PCIE.h"
+<<<<<<< HEAD
 #include "core/core.h"
+=======
+
+>>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
 // https://wiki.osdev.org/PCI
 
 typedef struct {
