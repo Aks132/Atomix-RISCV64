@@ -1,16 +1,9 @@
-<<<<<<< HEAD
 #pragma once
 
 #include "uart/uart.h"
 #include "mutex/mutex.h"
 #include "Wprintf.h"
-=======
-#pragma once 
->>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
 
-#include "uart/uart.h"
-#include "mutex/mutex.h"
-#include "libc/Wprintf.h"
 #define BASEADDDRKERNEL 0x80000000UL
 
 #define KERNELEND 		(BASEADDDRKERNEL + (128*1024*1024)) 

@@ -74,8 +74,4 @@ init_hart3:
     la t1, hartid3             # Store hart ID in data memory (for Core 3)
     sw t0, 0(t1)
     j Core3_Init            # Call core-specific initialization function
-<<<<<<< HEAD
    
-=======
-   
->>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241

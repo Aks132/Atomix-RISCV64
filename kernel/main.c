@@ -64,16 +64,10 @@ int main()
 { 
     if(mhartid() == 0){
         sys_init();
-<<<<<<< HEAD
         kernel_mem_init();
         maketable();
         enumerate_pci_devices();
         set_mode13();
         // poweroff();
-=======
-        //kernel_mem_init();
-        //maketable();
-        poweroff();
->>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
     }
 }

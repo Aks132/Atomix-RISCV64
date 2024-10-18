@@ -1,19 +1,10 @@
-#ifndef _SYSTEMADDR_H
-#define _SYSTEMADDR_H
+#pragma once
 
 #define KERNBASE 0x80000000L
-void UART_SEND(const char *str);
 
-#endif //_SYSTEMADDR_H
-
-
-
-<<<<<<< HEAD
 #define PAGE_SIZE 		  4096
 #define MAX_VIRTUAL_ADDR ((1L << (38)))
 #define TRAMPOLINE_COMMMON_REGION (MAX_VIRTUAL_ADDR - PAGE_SIZE)
 #define KERNELEND 		  (BASEADDDRKERNEL + (128*1024*1024)) 
 #define TRAPFRAME (TRAMPOLINE_COMMMON_REGION - PAGE_SIZE)
 // void UART_SEND(const char *str);
-=======
->>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241

@@ -1,7 +1,7 @@
 #include "core.h"
 #include "libc/Wprintf.h"
 /*
-  This file contains all the c functions associated with the core register 
+  This fiel contains all the c functions associated with the core register 
 
 */
 unsigned long mhartid()
@@ -97,18 +97,14 @@ void satp_write(unsigned long x){
 void sstatus_write(unsigned long x){
   asm volatile("csrw sstatus , %0" : : "r" (x));
 }
-
-uint64_t sstatus_read(){
+inline unsigned long sstatus_read(){
   unsigned long x;
   asm volatile("csrr %0 ,sstatus" : "=r" (x));
   return x;
 }
-<<<<<<< HEAD
 void write_sscratch(unsigned long value) {
   asm volatile("csrw sscratch, %0" : : "r"(value));
 }
-=======
->>>>>>> 0724837fc22bc01f98fa21061ef9c01bbe60f241
 uint64_t mie_read()
 {
   uint64_t x;
@@ -182,9 +178,11 @@ void tp_write(unsigned long hartid) {
 
 void EnableInterrupt(){
   sstatus_write(sstatus_read() | (1UL << 1));
+  my_printf("Interupt enabled\n");
 }
 void DisableInterrupt(){
 
   sstatus_write(sstatus_read() & ~(1UL << 1));
+  my_printf("Interupt diabled\n");
 }
 
