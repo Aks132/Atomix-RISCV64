@@ -1,4 +1,4 @@
-#include "PCIE.h"
+#include "pcie.h"
 
 // https://wiki.osdev.org/PCI
 

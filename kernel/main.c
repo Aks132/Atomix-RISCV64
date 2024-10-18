@@ -2,8 +2,9 @@
 
 mutex_t uart_mutex;
 
-void sys_init(){
-    mutex_init(&uart_mutex,"uart Mutex");
+void sys_init() {
+    // Initialize system, UART mutex, and print ISA information
+    mutex_init(&uart_mutex, "uart Mutex");
 
     unsigned long misa = misa_read();
     unsigned long base_isa = misa & 0x3; 
@@ -13,8 +14,7 @@ void sys_init(){
         case 1: my_printf("Base ISA: RV64\n"); break;
         case 2: my_printf("Base ISA: RV128\n"); break;
         default: my_printf("Unknown base ISA\n"); break;
-    }// finally some use of switch case LOL
-    
+    }
 
     my_printf("Supported Extensions:\n");
     mutex_lock(&uart_mutex);
@@ -26,46 +26,66 @@ void sys_init(){
     if (misa & (1UL << ('C' - 'A'))) my_printf("  Extension: 'C' (Compressed Instructions)\n");
     if (misa & (1UL << ('S' - 'A'))) my_printf("  Extension: 'S' (Supervisor Mode)\n");
     if (misa & (1UL << ('U' - 'A'))) my_printf("  Extension: 'U' (User Mode)\n");
-    if (misa & (1UL << ('Q' - 'A'))) my_printf("  Extension: 'Q' (Quad-Precision Floating Point)\n");
-    if (misa & (1UL << ('V' - 'A'))) my_printf("  Extension: 'V' (Vector Operations)\n");
-    if (misa & (1UL << ('B' - 'A'))) my_printf("  Extension: 'B' (Bit Manipulation)\n");
-    if (misa & (1UL << ('P' - 'A'))) my_printf("  Extension: 'P' (Packed-SIMD)\n");
-    if (misa & (1UL << ('H' - 'A'))) my_printf("  Extension: 'H' (Hypervisor)\n");
-    if (misa & (1UL << ('E' - 'A'))) my_printf("  Extension: 'E' (Embedded Base Integer ISA)\n");
-    if (misa & (1UL << ('J' - 'A'))) my_printf("  Extension: 'J' (Dynamic Translations)\n");
-    if (misa & (1UL << ('T' - 'A'))) my_printf("  Extension: 'T' (Transaction Memory)\n");
-    if (misa & (1UL << ('L' - 'A'))) my_printf("  Extension: 'L' (Decimal Floating Point)\n");
-    if (misa & (1UL << ('N' - 'A'))) my_printf("  Extension: 'N' (User-level interrupts)\n");
-    if (misa & (1UL << ('X' - 'A'))) my_printf("  Extension: 'X' (Non-standard extensions)\n");
-    if (misa & (1UL << ('Z' - 'A'))) my_printf("  Extension: 'Z' (Standard extensions)\n");
-
     mutex_unlock(&uart_mutex);
 
-    /*
-    For now we are operating in machine mode , now we can switch this into supervisor mode!
-   */
-
-    unsigned long mstatus = mstatus_read();  // Read the mstatus register
-    unsigned long current_privilege = ((mstatus >> 11) & 0x3);  // Extract the current privilege mode
+    unsigned long mstatus = mstatus_read();  
+    unsigned long current_privilege = ((mstatus >> 11) & 0x3);  
     mutex_lock(&uart_mutex);
     if (current_privilege == 0x1) {
         my_printf("We are in Supervisor mode!\n");
     } else if (current_privilege == 0x3) {
-        my_printf("We are still in Machine mode - > some thing went. wrong pls reset \n");
+        my_printf("We are in Machine mode, something went wrong!\n");
     } else if (current_privilege == 0x0) {
-        my_printf("We are in User mode , something went wrong\n");
+        my_printf("We are in User mode, something went wrong!\n");
     } 
     mutex_unlock(&uart_mutex);
-
-
 }
 
-int main()
-{ 
-    if(mhartid() == 0){
-        sys_init();
-        kernel_mem_init();
-        maketable();
-        poweroff();
+void task1() {
+    while (1) {
+        mutex_lock(&uart_mutex);
+        my_printf("Task 1 is running on core %d\n", (int)mhartid());
+        mutex_unlock(&uart_mutex);
+
+        for (volatile int i = 0; i < 1000000; i++);  // Simulate work
     }
+}
+
+void task2() {
+    while (1) {
+        mutex_lock(&uart_mutex);
+        my_printf("Task 2 is running on core %d\n", (int)mhartid());
+        for (volatile int i = 0; i < 1000000; i++);  // Simulate work
+        mutex_unlock(&uart_mutex);
+
+    }
+}
+
+void task3() {
+    while (1) {
+        mutex_lock(&uart_mutex);
+        my_printf("Task 3 is running on core %d\n", (int)mhartid());
+        for (volatile int i = 0; i < 1000000; i++);  // Simulate work
+        mutex_unlock(&uart_mutex);
+
+    }
+}
+
+int main() {
+    sys_init();  // Initialize the system (this can be done by any core)
+
+    // Assign tasks based on the core (hart ID)
+    if (mhartid() == 0) {
+        task1();  // Core 0 runs Task 1
+    } else if (mhartid() == 1) {
+        task2();  // Core 1 runs Task 2
+    } else if (mhartid() == 2) {
+        task3();  // Core 2 runs Task 3
+    } else {
+        // Other cores can run idle tasks or other work
+        my_printf("Core %d is idle\n",(int)mhartid());
+        while (1);
+    }
+
+    return 0;
 }

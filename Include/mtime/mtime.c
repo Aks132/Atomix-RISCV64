@@ -1,15 +1,22 @@
-#include "uart/uart.h" // Include UART for printing debug information
+#include "uart/uart.h"  // Include UART for printing debug information
 #include "mtime.h"
+#include "scheduler/scheduler.h"
+#include "mutex/mutex.h"
 
-#define MTIME_BASE 0x0200BFF8 // Adjust the base address for mtime
-#define MTIMECMP_BASE 0x02004000 // Adjust the base address for mtimecmp
+
+#define MTIME_BASE 0x0200BFF8  // Base address for mtime
+#define MTIMECMP_BASE 0x02004000  // Base address for mtimecmp
+#define CLOCK_FREQUENCY 1000000  // Adjust to match your clock frequency (e.g., 10 MHz)
+
+mutex_t delay_mutex;
 
 // Initialize the timer
 void timer_init(void) {
-    // Clear mtimecmp initially
-    *((volatile uint64_t *)MTIMECMP_BASE) = 0;
+    mutex_init(&delay_mutex,"delay mutex");
+    // Set mtimecmp to a future time to avoid immediate interrupts
+    *((volatile uint64_t *)MTIMECMP_BASE) = timer_get_time() + CLOCK_FREQUENCY;
 
-    // Here, you may want to set up your interrupt controller for handling timer interrupts.
+    // Set up your interrupt controller for handling timer interrupts (if needed)
 }
 
 // Get the current time in microseconds
@@ -23,28 +30,34 @@ void timer_set(uint64_t delay_us) {
     uint64_t current_time = timer_get_time();
     
     // Calculate the new mtimecmp value
-    uint64_t new_cmp = current_time + delay_us; // Adjust this calculation based on your clock frequency
+    uint64_t new_cmp = current_time + (delay_us * CLOCK_FREQUENCY / 1000000);  // Adjust delay_us based on clock frequency
 
-    // Set the mtimecmp register
+    // Set the mtimecmp register to trigger the next timer interrupt
     *((volatile uint64_t *)MTIMECMP_BASE) = new_cmp;
-}
-
-// Timer interrupt handler
-void timer_handler(void) {
-    // Acknowledge the timer interrupt (clear the interrupt)
-    // You might write to an interrupt controller or do specific handling here
-    UART_SEND("Timer interrupt occurred\n");
 }
 
 // Function for non-blocking delay
 void non_blocking_delay(uint64_t delay_us) {
-    timer_set(delay_us); // Set the timer
+   // mutex_lock(&delay_mutex);
+    timer_set(delay_us);  // Set the timer
 
     while (1) {
         // Check if the timer has expired
         if (timer_get_time() >= *((volatile uint64_t *)MTIMECMP_BASE)) {
-            break; // Delay is over
+            break;  // Delay is over
         }
-        // You can perform other tasks or sleep to save CPU cycles here
+        // Optional: Yield CPU time to other tasks here if multitasking is enabled
     }
+   // mutex_unlock(&delay_mutex);
+
+}
+// Timer interrupt handler
+void timer_handler(void) {
+    // Acknowledge the timer interrupt by setting the next timer interval
+    uint64_t current_time = timer_get_time();
+    *((volatile uint64_t *)MTIMECMP_BASE) = current_time + CLOCK_FREQUENCY;  // Set the next comparison time
+
+    UART_SEND("Timer interrupt occurred\n");
+    
+    schedule();
 }

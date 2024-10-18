@@ -28,9 +28,10 @@ c:
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/syscon/syscon.c -c -o $(BUILD_DIR)/syscon.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/pages.c -c -o $(BUILD_DIR)/pages.o
 	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/mtime/mtime.c -c -o $(BUILD_DIR)/mtime.o
+	$(CROSS_COMPILE)gcc $(CFLAGS) $(INCLUDE_DIR)/scheduler/scheduler.c -c -o $(BUILD_DIR)/scheduler.o
 
 link:
-	$(CROSS_COMPILE)ld -T linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/print.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/mutex.o $(BUILD_DIR)/memAlloc.o $(BUILD_DIR)/core.o $(BUILD_DIR)/syscon.o $(BUILD_DIR)/mtime.o $(BUILD_DIR)/start.o $(BUILD_DIR)/main.o $(BUILD_DIR)/pages.o -o $(BUILD_DIR)/kernel.elf -Map $(BUILD_DIR)/kernel.map
+	$(CROSS_COMPILE)ld -T linker.ld $(BUILD_DIR)/boot.o $(BUILD_DIR)/print.o $(BUILD_DIR)/uart.o $(BUILD_DIR)/scheduler.o $(BUILD_DIR)/mutex.o $(BUILD_DIR)/memAlloc.o $(BUILD_DIR)/core.o $(BUILD_DIR)/syscon.o $(BUILD_DIR)/mtime.o $(BUILD_DIR)/start.o $(BUILD_DIR)/main.o $(BUILD_DIR)/pages.o -o $(BUILD_DIR)/kernel.elf -Map $(BUILD_DIR)/kernel.map
 
 # QEMU target for normal execution
 qemu: all
