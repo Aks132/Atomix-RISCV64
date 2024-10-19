@@ -1,5 +1,4 @@
-#ifndef SCHEDULER_H
-#define SCHEDULER_H
+#pragma once
 
 #include "libc/types.h"
 #include "libc/Wprintf.h"
@@ -35,4 +34,3 @@ void start_scheduler();                                    // Starts the task sc
 // Memory management functions
 uint64_t allocate_stack();   // Allocates memory for a task's stack
 
-#endif // SCHEDULER_H

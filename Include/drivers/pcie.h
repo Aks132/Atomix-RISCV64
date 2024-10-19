@@ -1,6 +1,7 @@
-#ifndef __PCIE_H__
-#define __PCIE_H__
-#include "libc/Wprintf.h"
+//riscV/vict.h
+#pragma once
+
+#include "Wprintf.h"
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 typedef unsigned long uintptr_t;
@@ -23,6 +24,3 @@ void setup_pci_vga();
     * https://www.youtube.com/watch?v=L9qXjmJdQXY&t=346s
     * 
 */
-
-#endif //__PCIE_H__
-

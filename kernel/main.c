@@ -1,6 +1,7 @@
 #include "header.h"
 
 mutex_t uart_mutex;
+volatile int setup_not_ready = 0;
 
 void sys_init() {
     // Initialize system, UART mutex, and print ISA information
@@ -76,15 +77,26 @@ int main() {
 
     // Assign tasks based on the core (hart ID)
     if (mhartid() == 0) {
-        task1();  // Core 0 runs Task 1
+        sys_init();
+        kernel_mem_init();
+        maketable();
+        enumerate_pci_devices();
+        set_mode13();
+        setup_not_ready = 1;
+
     } else if (mhartid() == 1) {
-        task2();  // Core 1 runs Task 2
+        while(setup_not_ready != 1){
+        }
+        task1();  // Core 1 runs Task 2
     } else if (mhartid() == 2) {
-        task3();  // Core 2 runs Task 3
-    } else {
+        while(setup_not_ready != 1){
+        }
+        task2();  // Core 2 runs Task 3
+    } else if (mhartid() == 3) {
+        while(setup_not_ready != 1){
+        }
         // Other cores can run idle tasks or other work
-        my_printf("Core %d is idle\n",(int)mhartid());
-        while (1);
+        task3();
     }
 
     return 0;

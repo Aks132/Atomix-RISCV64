@@ -1,8 +1,9 @@
-#pragma once 
+#pragma once
 
 #include "uart/uart.h"
 #include "mutex/mutex.h"
-#include "libc/Wprintf.h"
+#include "Wprintf.h"
+
 #define BASEADDDRKERNEL 0x80000000UL
 
 #define KERNELEND 		(BASEADDDRKERNEL + (128*1024*1024)) 

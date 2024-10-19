@@ -1,5 +1,4 @@
-#ifndef MTIME_H
-#define MTIME_H
+#pragma once
 
 #include "libc/types.h"
 
@@ -22,6 +21,3 @@ inline static void enable_global_interrupts() {
 
 // Timer interrupt handler
 void timer_handler(void);
-
-
-#endif // MTIME_H

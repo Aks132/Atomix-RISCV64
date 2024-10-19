@@ -34,6 +34,10 @@ SECTIONS
   .text : {
     PROVIDE(_text_start = .);
     *(.text .text.*)
+    . = ALIGN(0x1000);
+    _trampoline = .;
+    *(.tramp) 
+    . = ALIGN(0x1000);
     PROVIDE(_text_end = .);
   } >ram AT>ram :text
 
@@ -69,9 +73,9 @@ SECTIONS
     . = . + 4096*4;
     PROVIDE(_stack_end = .);
   } >ram AT>ram :stack 
- PROVIDE(_end_ = .); 
+ 
 } 
 
        
-
+     PROVIDE(_end_ = .); 
     PROVIDE(_memory_start = ORIGIN(ram));

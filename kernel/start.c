@@ -1,6 +1,5 @@
 #include "start.h"
-#include "mutex/mutex.h"
-#include "core/core.h"
+
 
 const char * core0 = "I am core 0! \n";
 const char * core1 = "I am core 1! \n";
@@ -35,7 +34,7 @@ void Start() {
     write_medeleg(0xFFFF);
     write_mideleg(0xFFFF);
     sieregister = sie_read();
-    sieregister | ((1UL << 1) | (1UL << 5) | (1UL << 9)); // Enable 3 ints for S mode
+    sieregister |= ((1UL << 1) | (1UL << 5) | (1UL << 9)); // Enable 3 ints for S mode
     sie_write(sieregister | ((1UL << 1) | (1UL << 5) | (1UL << 9)));
 
     pmpaddr0_write(0x3fffffffffffffull);
