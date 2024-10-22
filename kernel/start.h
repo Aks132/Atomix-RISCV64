@@ -6,6 +6,7 @@
 #include "libc/bool.h"
 #include "mutex/mutex.h"
 #include "core/core.h"
+#include "mtime/mtime.h"
 extern unsigned int hartid0;
 extern unsigned int hartid1;
 extern unsigned int hartid2;
