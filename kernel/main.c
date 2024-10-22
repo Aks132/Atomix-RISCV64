@@ -73,31 +73,21 @@ void task3() {
 }
 
 int main() {
-    sys_init();  // Initialize the system (this can be done by any core)
+
 
     // Assign tasks based on the core (hart ID)
     if (mhartid() == 0) {
+        tp_write(mhartid());
         sys_init();
         kernel_mem_init();
         maketable();
+        SetupInterrupt();
+        SetupPlic();
         enumerate_pci_devices();
         set_mode13();
-        setup_not_ready = 1;
+        EnableInterrupt();
+         __asm__ volatile("csrrs zero, sip, %0" : : "r"(1 << 1));
 
-    } else if (mhartid() == 1) {
-        while(setup_not_ready != 1){
-        }
-        task1();  // Core 1 runs Task 2
-    } else if (mhartid() == 2) {
-        while(setup_not_ready != 1){
-        }
-        task2();  // Core 2 runs Task 3
-    } else if (mhartid() == 3) {
-        while(setup_not_ready != 1){
-        }
-        // Other cores can run idle tasks or other work
-        task3();
     }
-
     return 0;
 }

@@ -43,14 +43,14 @@ void Start() {
     mie_write(mie_read() | (1L << 5)); // Enable supervisor-mode timer interrupts
     menvcfg_write(menvcfg_read() | (1L << 63)); // Enable SSTC extension
     mcounteren_write(mcounteren_read() | 2);    // Allow supervisor to use stimecmp and time
-
+    timer_init();
     stimecmp_write(time_read() + 1000000); // Request the very first timer interrupt
 
     // Wait for all cores to be ready
     while (cores_ready < NUM_CORES) {
         // Busy wait or implement a more efficient wait here
     }
-
+    enable_global_interrupts();
     mret(); // Proceed to supervisor mode and jump to main only when all cores are ready
 }
 
@@ -59,13 +59,13 @@ void Core0_Init() {
 }
 
 void Core1_Init() {
-    Start();
+    // Start();
 }
 
 void Core2_Init() {
-    Start();
+    // Start();
 }
 
 void Core3_Init() {
-    Start();
+    // Start();
 }
