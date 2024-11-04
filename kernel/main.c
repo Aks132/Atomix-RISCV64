@@ -45,6 +45,9 @@ int main() {
         enumerate_pci_devices();
         set_mode13();
         TrapActivated();    
+        Start_PLIC(); 
+        shellInit();
+
     }
     return 0;
 }

@@ -10,4 +10,5 @@ void reverse(char str[], int length);
 char* itoa(int num, char* str, int base);
 void Println();
 void my_printf(const char *format, ...);
+int my_strcmp(const char *str1, const char *str2);
 

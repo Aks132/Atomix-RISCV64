@@ -2,9 +2,16 @@
 
 // The best part of OS :)
 // context switching 
-
+#include "pages.h"
 typedef unsigned long uint64;
-typedef struct {
+#define NUMNER_OF_THREAD 4
+
+
+
+void mapping_process_kernelstack(unsigned long* page);
+
+
+typedef struct context{
 
   
   uint64 sp;
@@ -68,13 +75,19 @@ enum state {
     run,
     dead,
     goingtorun,
+    idle,
 };
 typedef struct process
 {
     int pid;
-    process* parent; // inherited process !
-    uint64 kernel_sp ; //stack 
-    uint64 pagetable;
+    struct process* parent; // inherited process !
+    context_t context;
+    uint64 kernel_sp ; 
+    unsigned long* pagetable;
+    unsigned int size;     
     uint64 processmemory;
     int dead;
+    enum state current_state;
 }process_t;
+
+

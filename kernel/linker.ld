@@ -44,8 +44,10 @@ SECTIONS
    PROVIDE(_global_pointer = .);
 
   .rodata : {
+    . = ALIGN(16);
     PROVIDE(_rodata_start = .);
     *(.rodata .rodata.*)
+    . = ALIGN(16);
     PROVIDE(_rodata_end = .);
   } >ram AT>ram :text
 

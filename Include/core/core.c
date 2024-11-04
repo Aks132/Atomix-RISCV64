@@ -97,9 +97,14 @@ void satp_write(unsigned long x){
 void sstatus_write(unsigned long x){
   asm volatile("csrw sstatus , %0" : : "r" (x));
 }
+unsigned long ssstatus_read(){
+  unsigned long x;
+  asm volatile("csrr %0 , sstatus" : "=r" (x));
+  return x;
+}
 inline unsigned long sstatus_read(){
   unsigned long x;
-  asm volatile("csrr %0 ,sstatus" : "=r" (x));
+  asm volatile("csrr %0 ,sstatus " : "=r" (x));
   return x;
 }
 void write_sscratch(unsigned long value) {
@@ -186,3 +191,28 @@ void DisableInterrupt(){
   //my_printf("Interupt diabled\n");
 }
 
+void stvec_write(unsigned long x){
+  asm volatile("csrw stvec, %0" : : "r" (x));
+}
+
+void  sepc_write(unsigned long x)
+{
+  asm volatile("csrw sepc, %0" : : "r" (x));
+}
+unsigned long scause_read()
+{
+  unsigned long x;
+  asm volatile("csrr %0, scause" : "=r" (x) );
+  return x;
+}
+unsigned long stval_read()
+{
+  unsigned long x;
+  asm volatile("csrr %0, stval" : "=r" (x) );
+  return x;
+}
+unsigned long stvec_read(){
+  unsigned long x;
+  asm volatile("csrr %0, stvec" : "=r" (x) );
+  return x;
+}
