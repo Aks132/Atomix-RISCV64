@@ -1,19 +1,10 @@
-        #
-        # interrupts and exceptions while in supervisor
-        # mode come here.
-        #
-        # the current stack is a kernel stack.
-        # push registers, call kerneltrap().
-        # when kerneltrap() returns, restore registers, return.
-        #
-.globl IRQ_HANDLER
-.globl kernelvec
+.globl Kernel_Trap_IRQ_HANDLER
+.globl KernelVectorSwitch
 .align 4
-kernelvec:
-        # make room to save registers.
+KernelVectorSwitch:
+
         addi sp, sp, -256
 
-        # save caller-saved registers.
         sd ra, 0(sp)
         sd sp, 8(sp)
         sd gp, 16(sp)
@@ -34,14 +25,12 @@ kernelvec:
         sd t5, 232(sp)
         sd t6, 240(sp)
 
-        # call the C trap handler in trap.c
-        call  IRQ_HANDLER
 
-        # restore registers.
+        call Kernel_Trap_IRQ_HANDLER
+
         ld ra, 0(sp)
         ld sp, 8(sp)
         ld gp, 16(sp)
-        # not tp (contains hartid), in case we moved CPUs
         ld t0, 32(sp)
         ld t1, 40(sp)
         ld t2, 48(sp)
@@ -60,5 +49,4 @@ kernelvec:
 
         addi sp, sp, 256
 
-        # return to whatever we were doing in the kernel.
         sret
