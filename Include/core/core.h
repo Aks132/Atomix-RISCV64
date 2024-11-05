@@ -2,7 +2,6 @@
 #include "libc/types.h"
 #define UNUSED(x) (void)(x)
 
-extern int main();
 unsigned long mhartid();
 unsigned long mstatus_read();
 void mstatus_write( unsigned long x);

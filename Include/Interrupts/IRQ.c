@@ -6,11 +6,11 @@ void kernelSwitch(){
 
     IRQ_HANDLER();
 }
-extern void kernelvec();
+
+
 void SetupInterrupt()
 {
-    // stvec_write((unsigned long)(kernelvec));
-     __asm__ volatile("csrw stvec, %0" : : "r"(&kernelvec));
+    //asm volatile("csrw stvec, %0" : : "r" ((uint64_t)&m_trap_vec));
 }
 
 void SetupPlic(){
@@ -89,7 +89,7 @@ void RestoreOldContext(){
 
 
 void IRQ_HANDLER(){
-    my_printf("interrrr called");
-    __asm__ volatile("csrrc zero, sip, %0" : : "r"(1 << 1));
+  my_printf("interrrr called");
+  asm volatile("csrrc zero, sip, %0" : : "r"(1 << 1));
 
 }

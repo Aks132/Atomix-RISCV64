@@ -16,4 +16,5 @@ void Core1_Init();
 void Core2_Init();
 void Core3_Init();
 
+extern void main();
 

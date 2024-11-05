@@ -1,6 +1,6 @@
 #include "header.h"
 
-void sys_init() {
+void kinit() {
     unsigned long misa = misa_read();
     unsigned long base_isa = misa & 0x3; 
 
@@ -21,10 +21,9 @@ void sys_init() {
     if (misa & (1UL << ('C' - 'A'))) my_printf("  Extension: 'C' (Compressed Instructions)\n");
     if (misa & (1UL << ('S' - 'A'))) my_printf("  Extension: 'S' (Supervisor Mode)\n");
     if (misa & (1UL << ('U' - 'A'))) my_printf("  Extension: 'U' (User Mode)\n");
-
-
+    
     unsigned long mstatus = mstatus_read();  
-    unsigned long current_privilege = ((mstatus >> 11) & 0x3);  
+    unsigned long current_privilege = ((mstatus >> 11) & 0x3); 
 
     if (current_privilege == 0x1) {
         my_printf("We are in Supervisor mode!\n");
@@ -33,18 +32,29 @@ void sys_init() {
     } else if (current_privilege == 0x0) {
         my_printf("We are in User mode, something went wrong!\n");
     } 
+    
+    kernel_mem_init();
+    maketable();
 
 }
 
-int main() {
+void kinit_hart(){
 
-    if (mhartid() == 0) {
-        sys_init();
-        kernel_mem_init();
-        maketable();
-        enumerate_pci_devices();
-        set_mode13();
-        TrapActivated();    
-    }
-    return 0;
+
+}
+void make_syscall();
+
+void main() {
+
+    my_printf("I am into main....\n");
+    // if (mhartid() == 0) {
+        
+ 
+
+    
+
+    //     enumerate_pci_devices();
+    //     set_mode13();
+    //     //make_syscall();   
+    // }
 }

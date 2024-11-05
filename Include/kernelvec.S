@@ -1,16 +1,33 @@
-        #
-        # interrupts and exceptions while in supervisor
-        # mode come here.
-        #
-        # the current stack is a kernel stack.
-        # push registers, call kerneltrap().
-        # when kerneltrap() returns, restore registers, return.
-        #
-.globl IRQ_HANDLER
-.globl kernelvec
+.option norvc
+.altmacro
+.set NUM_GP_REGS, 32  # Number of registers per context
+.set NUM_FP_REGS, 32
+.set REG_SIZE, 8   # Register size (in bytes)
+.set MAX_CPUS, 4  # Maximum number of CPUs
+
+# Use macros for saving and restoring multiple registers
+.macro save_gp i, basereg=t6
+	sd	x\i, ((\i)*REG_SIZE)(\basereg)
+.endm
+.macro load_gp i, basereg=t6
+	ld	x\i, ((\i)*REG_SIZE)(\basereg)
+.endm
+.macro save_fp i, basereg=t6
+	fsd	f\i, ((NUM_GP_REGS+(\i))*REG_SIZE)(\basereg)
+.endm
+.macro load_fp i, basereg=t6
+	fld	f\i, ((NUM_GP_REGS+(\i))*REG_SIZE)(\basereg)
+.endm
+
+
+.section .text
+.global m_trap_vector
+# This must be aligned by 4 since the last two bits
+# of the mtvec register do not contribute to the address
+# of this vector.
 .align 4
-kernelvec:
-        # make room to save registers.
+m_trap_vector:
+          # make room to save registers.
         addi sp, sp, -256
 
         # save caller-saved registers.
@@ -59,6 +76,10 @@ kernelvec:
         ld t6, 240(sp)
 
         addi sp, sp, 256
+        
+	mret
 
-        # return to whatever we were doing in the kernel.
-        sret
+.global make_syscall
+make_syscall:
+	ecall
+	ret
