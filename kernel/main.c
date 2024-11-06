@@ -1,5 +1,6 @@
 #include "header.h"
 
+
 void kinit() {
     unsigned long misa = misa_read();
     unsigned long base_isa = misa & 0x3; 
@@ -25,10 +26,10 @@ void kinit() {
     unsigned long mstatus = mstatus_read();  
     unsigned long current_privilege = ((mstatus >> 11) & 0x3); 
 
-    if (current_privilege == 0x1) {
-        my_printf("We are in Supervisor mode!\n");
-    } else if (current_privilege == 0x3) {
-        my_printf("We are in Machine mode, something went wrong!\n");
+    if (current_privilege == 0x3) {
+        my_printf("We are in Machine mode!\n");
+    } else if (current_privilege == 0x1) {
+        my_printf("We are in Supervisor mode, something went wrong!\n");
     } else if (current_privilege == 0x0) {
         my_printf("We are in User mode, something went wrong!\n");
     } 
@@ -46,15 +47,10 @@ void make_syscall();
 
 void main() {
 
-    my_printf("I am into main....\n");
-    // if (mhartid() == 0) {
-        
- 
-
-    
-
-    //     enumerate_pci_devices();
-    //     set_mode13();
-    //     //make_syscall();   
-    // }
+    if (mhartid() == 0) 
+    {
+        enumerate_pci_devices();
+        set_mode13();
+        //make_syscall();   
+    }
 }

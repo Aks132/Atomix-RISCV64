@@ -11,3 +11,5 @@
 #include "drivers/PCIE.h"
 #include "drivers/VGA.h"
 #include "interrupts/IRQ.h"
+
+void kinit();

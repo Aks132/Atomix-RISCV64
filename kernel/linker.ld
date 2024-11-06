@@ -43,12 +43,6 @@ SECTIONS
 
    PROVIDE(_global_pointer = .);
 
-  .rodata : {
-    PROVIDE(_rodata_start = .);
-    *(.rodata .rodata.*)
-    PROVIDE(_rodata_end = .);
-  } >ram AT>ram :text
-
   .data : {
     . = ALIGN(4096);
     PROVIDE(_data_start = .);
@@ -64,10 +58,6 @@ SECTIONS
 
   } >ram AT>ram :bss
 
-
-  
-
-  
   .stack : {
     PROVIDE(_stack_start = .);
     . = . + 4096*4;
@@ -75,7 +65,6 @@ SECTIONS
   } >ram AT>ram :stack 
  
 } 
-
        
-     PROVIDE(_end_ = .); 
+    PROVIDE(_end_ = .); 
     PROVIDE(_memory_start = ORIGIN(ram));

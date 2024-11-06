@@ -42,6 +42,8 @@ clear_bss_done:
 	# The stack grows from bottom to top, so we put the stack pointer
 	# to the very end of the stack range.
 	la		sp, _stack_end
+
+	
 	# Setting `mstatus` register:
 	# 0b01 << 11: Machine's previous protection mode is 2 (MPP=2).
 	li		t0, 0b11 << 11
@@ -54,11 +56,14 @@ clear_bss_done:
 	# Set the return address to get us into supervisor mode
 	la		ra, supervisor_entry
 	# We use mret here so that the mstatus register is properly updated.
-	mret
+	# mret 
+	# mret is not working as expected when we do mret it should move to kinit with
+	# machine mode but we are getting user mode in kinit given we are in machine mode 
+	# just before mret and just after mret we are in user mode!! Why?
+	call kinit
 
 supervisor_entry:
 	# We set the return address (ra above) to this label. When kinit() is finished
-	# in Rust, it will return here.
 
 	# Setting `mstatus` (supervisor status) register:
 	# 0b01 << 11 : Previous protection mode is 1 (MPP=01 [Supervisor]).
@@ -68,10 +73,33 @@ supervisor_entry:
 	# with the previous bits.
 	li		t0, (0b01 << 11) | (1 << 7) | (1 << 5)
 	csrw	mstatus, t0
+
+	# Configure delegation registers to delegate all synchronous exceptions
+    # and interrupts from machine to supervisor mode.
+    li     t0, 0xFFFF
+    csrw   medeleg, t0
+    csrw   mideleg, t0
+
+    # Enable supervisor interrupts for software, timer, and external sources.
+    # SSIE (1 << 1), STIE (1 << 5), SEIE (1 << 9).
+    li     t1, ((1 << 1) | (1 << 5) | (1 << 9))
+    csrw   sie, t1
+
+    # Configure PMP to allow full memory access in supervisor mode.
+    # Set PMP address range to cover all of memory.
+    li     t2, 0x3FFFFFFFFFFFFF
+    csrw   pmpaddr0, t2
+
+    # Set PMP configuration for entry 0 to allow read, write, execute.
+    # The configuration value `0xF` enables R/W/X permissions.
+    li     t3, 0xF
+    csrw   pmpcfg0, t3
+	
 	# Machine's trap vector base address is set to `m_trap_vector`, for
 	# "machine" trap vector.
 	la		t2, m_trap_vector
 	csrw	mtvec, t2
+	
 	# Setting `stvec` (supervisor trap vector) register:
 	# Essentially this is a function pointer, but the last two bits can be 00 or 01
 	# 00        : All exceptions set pc to BASE
@@ -92,8 +120,9 @@ supervisor_entry:
 	li		t2, 0x888
 	csrw	mie, t2
 
-
-    mret
+    # mret 
+	# mret is not working, going into infinite loop.
+	call main
 
 secondary_hart_entry:
 
@@ -120,12 +149,12 @@ secondary_hart_entry:
 	# awaken these parked harts.
 	li		t3, (1 << 3)
 	csrw	mie, t3
-	# Machine's exception program counter (MEPC) is set to the Rust initialization
+	# Machine's exception program counter (MEPC) is set to the C initialization
 	# code and waiting loop.
 	la		t1, kinit_hart
 	csrw	mepc, t1
 	# Machine's trap vector base address is set to `m_trap_vector`, for
-	# "machine" trap vector. The Rust initialization routines will give each
+	# "machine" trap vector. The C initialization routines will give each
 	# hart its own trap frame. We can use the same trap function and distinguish
 	# between each hart by looking at the trap frame.
 	la		t2, m_trap_vector
