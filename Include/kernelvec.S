@@ -52,7 +52,7 @@ m_trap_vector:
         sd t6, 240(sp)
 
         # call the C trap handler in trap.c
-        call  IRQ_HANDLER
+        call  m_trap
 
         # restore registers.
         ld ra, 0(sp)
@@ -77,7 +77,7 @@ m_trap_vector:
 
         addi sp, sp, 256
         
-	mret
+	sret
 
 .global make_syscall
 make_syscall:

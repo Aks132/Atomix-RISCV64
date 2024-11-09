@@ -60,7 +60,7 @@ clear_bss_done:
 	# mret is not working as expected when we do mret it should move to kinit with
 	# machine mode but we are getting user mode in kinit given we are in machine mode 
 	# just before mret and just after mret we are in user mode!! Why?
-	call kinit
+	mret
 
 supervisor_entry:
 	# We set the return address (ra above) to this label. When kinit() is finished
@@ -76,30 +76,30 @@ supervisor_entry:
 
 	# Configure delegation registers to delegate all synchronous exceptions
     # and interrupts from machine to supervisor mode.
-    li     t0, 0xFFFF
-    csrw   medeleg, t0
-    csrw   mideleg, t0
+    # li     t0, 0xFFFF
+    # csrw   medeleg, t0
+    # csrw   mideleg, t0
 
     # Enable supervisor interrupts for software, timer, and external sources.
     # SSIE (1 << 1), STIE (1 << 5), SEIE (1 << 9).
-    li     t1, ((1 << 1) | (1 << 5) | (1 << 9))
-    csrw   sie, t1
+    # li     t1, ((1 << 1) | (1 << 5) | (1 << 9))
+    # csrw   sie, t1
 
     # Configure PMP to allow full memory access in supervisor mode.
     # Set PMP address range to cover all of memory.
-    li     t2, 0x3FFFFFFFFFFFFF
-    csrw   pmpaddr0, t2
+    # li     t2, 0x3FFFFFFFFFFFFF
+    # csrw   pmpaddr0, t2
 
     # Set PMP configuration for entry 0 to allow read, write, execute.
     # The configuration value `0xF` enables R/W/X permissions.
-    li     t3, 0xF
-    csrw   pmpcfg0, t3
+    # li     t3, 0xF
+    # csrw   pmpcfg0, t3
 	
 	# Machine's trap vector base address is set to `m_trap_vector`, for
 	# "machine" trap vector.
 	la		t2, m_trap_vector
 	csrw	mtvec, t2
-	
+
 	# Setting `stvec` (supervisor trap vector) register:
 	# Essentially this is a function pointer, but the last two bits can be 00 or 01
 	# 00        : All exceptions set pc to BASE
@@ -120,9 +120,9 @@ supervisor_entry:
 	li		t2, 0x888
 	csrw	mie, t2
 
-    # mret 
+	mret 
 	# mret is not working, going into infinite loop.
-	call main
+	# call main
 
 secondary_hart_entry:
 

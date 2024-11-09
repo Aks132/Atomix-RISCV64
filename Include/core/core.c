@@ -4,6 +4,21 @@
   This fiel contains all the c functions associated with the core register 
 
 */
+// Universal function to read a CSR register
+unsigned long csr_read(const char* csr)
+{
+    unsigned long value;
+    asm volatile("csrr %0, %1" : "=r" (value) : "i" (csr));
+    return value;
+}
+
+// Universal function to write to a CSR register
+void csr_write(const char* csr, unsigned long value)
+{
+    asm volatile("csrw %0, %1" : : "i" (csr), "r" (value));
+}
+
+
 unsigned long mhartid()
 {
   unsigned long x;
@@ -18,6 +33,13 @@ r_tp()
   return x;
 }
 
+unsigned long mcause_read()
+{
+  unsigned long x;
+  asm volatile("csrr %0, mcause" : "=r" (x) );
+  return x;
+}
+
 unsigned long mstatus_read()
 {
   unsigned long x;
@@ -25,9 +47,23 @@ unsigned long mstatus_read()
   return x;
 }
 
+
 void mstatus_write( unsigned long x)
 {
   asm volatile("csrw mstatus, %0" : : "r" (x));
+}
+
+unsigned long mtval_read()
+{
+  unsigned long x;
+  asm volatile("csrr %0, mtval" : "=r" (x) );
+  return x;
+}
+unsigned long get_mepc()
+{
+  unsigned long x;
+  asm volatile("csrr %0, mepc" : "=r" (x) );
+  return x;
 }
 
 void set_mepc(unsigned long x){

@@ -2,10 +2,16 @@
 #include "libc/types.h"
 #define UNUSED(x) (void)(x)
 
+unsigned long csr_read(const char* csr);
+void csr_write(const char* csr, unsigned long value);
+
 unsigned long mhartid();
+unsigned long mcause_read();
 unsigned long mstatus_read();
 void mstatus_write( unsigned long x);
 void set_mepc(unsigned long x);
+unsigned long get_mepc();
+unsigned long mtval_read();
 void mret();
 unsigned char  get_mpp(void);
 unsigned long misa_read(void);

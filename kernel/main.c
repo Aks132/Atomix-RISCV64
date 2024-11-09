@@ -48,9 +48,20 @@ void make_syscall();
 void main() {
 
     if (mhartid() == 0) 
-    {
+    {    
+    unsigned long mstatus = mstatus_read();  
+    unsigned long current_privilege = ((mstatus >> 11) & 0x3); 
+
+    if (current_privilege == 0x3) {
+        my_printf("We are in Machine mode!\n");
+    } else if (current_privilege == 0x1) {
+        my_printf("We are in Supervisor mode, something went wrong!\n");
+    } else if (current_privilege == 0x0) {
+        my_printf("We are in User mode, something went wrong!\n");
+    } 
         enumerate_pci_devices();
         set_mode13();
-        //make_syscall();   
+
+        asm volatile("ecall");   
     }
 }
