@@ -2,9 +2,6 @@
 #include "libc/types.h"
 #define UNUSED(x) (void)(x)
 
-unsigned long csr_read(const char* csr);
-void csr_write(const char* csr, unsigned long value);
-
 unsigned long mhartid();
 unsigned long mcause_read();
 unsigned long mstatus_read();

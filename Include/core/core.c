@@ -5,18 +5,6 @@
 
 */
 // Universal function to read a CSR register
-unsigned long csr_read(const char* csr)
-{
-    unsigned long value;
-    asm volatile("csrr %0, %1" : "=r" (value) : "i" (csr));
-    return value;
-}
-
-// Universal function to write to a CSR register
-void csr_write(const char* csr, unsigned long value)
-{
-    asm volatile("csrw %0, %1" : : "i" (csr), "r" (value));
-}
 
 
 unsigned long mhartid()

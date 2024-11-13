@@ -1,6 +1,8 @@
 // This is just a synchronous intreuption ><
 #include "trap.h"
 
+void m_trap();
+
 void m_trap() {
     // Async trap are those which happen due to other process on current on going intruction,
     // sync one happens durring current execution
@@ -69,6 +71,6 @@ void m_trap() {
     }
 
     // Return updated program counter
-    return return_pc;
+    //return return_pc;
 
 }
